@@ -169,38 +169,6 @@ class Cube {
         gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
         var allverts = [];
-      
-        // front face (triangle 1)
-        // allverts = allverts.concat([0, 0, 0, 1, 0, 0, 0, 1, 0]);
-        // // front face (triangle 2)
-        // allverts = allverts.concat([0, 0, 0, 1, 1, 0, 1, 0, 0]);
-      
-        // // back face (triangle 1)
-        // allverts = allverts.concat([1, 0, 1, 0, 0, 1, 0, 1, 1]);
-        // // back face (triangle 2)
-        // allverts = allverts.concat([0, 0, 1, 0, 1, 1, 1, 1, 1]);
-      
-        // // top face (triangle 1)
-        // allverts = allverts.concat([0, 1, 0, 1, 1, 0, 1, 1, 1]);
-        // // top face (triangle 2)
-        // allverts = allverts.concat([0, 1, 0, 0, 1, 1, 1, 1, 1]);
-      
-        // // bottom face (triangle 1)
-        // allverts = allverts.concat([0, 0, 0, 1, 0, 0, 1, 0, 1]);
-        // // bottom face (triangle 2)
-        // allverts = allverts.concat([0, 0, 0, 0, 0, 1, 1, 0, 1]);
-      
-        // // right face (triangle 1)
-        // allverts = allverts.concat([1, 0, 0, 1, 1, 0, 1, 1, 1]);
-        // // right face (triangle 2)
-        // allverts = allverts.concat([1, 0, 0, 1, 0, 1, 1, 1, 1]);
-      
-        // // left face (triangle 1)
-        // allverts = allverts.concat([0, 0, 0, 0, 1, 0, 0, 1, 1]);
-        // // left face (triangle 2)
-        // allverts = allverts.concat([0, 0, 0, 0, 0, 1, 0, 1, 1]);
-        // Assuming you have an array to store all cube vertices
-        var allverts = [];
 
         // Front face (counter-clockwise order)
         allverts = allverts.concat([0, 0, 0,  // bottom-left
