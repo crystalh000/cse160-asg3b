@@ -79,81 +79,152 @@ class Cube {
 
     }
 
-    // used Gemini to assist with the renderfast() function
+    // used ChatGPT to fix texturing of cubes and drawTriangle3DUV
     renderfast() {
         var rgba = this.color;
         gl.uniform1i(u_whichTexture, this.textureNum);
         gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
+        
         var allverts = [];
+        var uvCoords = [];
+    
+        // Front face
+        allverts.push(0, 0, 0, 1, 0, 0, 1, 1, 0); // Triangle 1
+        uvCoords.push(0, 0, 1, 0, 1, 1);
+    
+        allverts.push(0, 0, 0, 1, 1, 0, 0, 1, 0); // Triangle 2
+        uvCoords.push(0, 0, 1, 1, 0, 1);
+    
+        // Back face
+        allverts.push(1, 0, 1, 0, 0, 1, 0, 1, 1); // Triangle 1
+        uvCoords.push(1, 0, 0, 0, 0, 1);
+    
+        allverts.push(1, 0, 1, 0, 1, 1, 1, 1, 1); // Triangle 2
+        uvCoords.push(1, 0, 0, 1, 1, 1);
+    
+        // Top face
+        allverts.push(0, 1, 0, 1, 1, 0, 1, 1, 1); // Triangle 1
+        uvCoords.push(0, 1, 1, 1, 1, 0);
+    
+        allverts.push(0, 1, 0, 1, 1, 1, 0, 1, 1); // Triangle 2
+        uvCoords.push(0, 1, 1, 0, 0, 1);
+    
+        // Bottom face
+        allverts.push(0, 0, 0, 1, 0, 0, 1, 0, 1); // Triangle 1
+        uvCoords.push(0, 0, 1, 0, 1, 1);
+    
+        allverts.push(0, 0, 0, 1, 0, 1, 0, 0, 1); // Triangle 2
+        uvCoords.push(0, 0, 1, 1, 0, 0);
+    
+        // Right face
+        allverts.push(1, 0, 0, 1, 1, 0, 1, 1, 1); // Triangle 1
+        uvCoords.push(0.5, 0, 0.5, 1, 1, 1);
+    
+        allverts.push(1, 0, 0, 1, 1, 1, 1, 0, 1); // Triangle 2
+        uvCoords.push(0.5, 0, 1, 1, 1, 0.5);
+    
+        // Left face
+        allverts.push(0, 0, 0, 0, 1, 0, 0, 1, 1); // Triangle 1
+        uvCoords.push(0, 0, 0, 1, 0.5, 1);
+    
+        allverts.push(0, 0, 0, 0, 1, 1, 0, 0, 1); // Triangle 2
+        uvCoords.push(0, 0, 0.5, 1, 1, 0.5);
+    
+        // Draw the vertices and texture coordinates
+        drawTriangle3DUV(allverts, uvCoords);
+    }
+    
+    // renderfast() {
+    //     var rgba = this.color;
+    //     gl.uniform1i(u_whichTexture, this.textureNum);
+    //     gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+    //     gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
+    //     var allverts = [];
+    //     var uvCoords = [];
 
-        // Front face (counter-clockwise order)
-        allverts = allverts.concat([0, 0, 0,  // bottom-left
-                                    1, 0, 0,  // bottom-right
-                                    1, 1, 0]); // top-right
+    //     // Front face (counter-clockwise order)
 
-        // Front face (continued, second triangle)
-        allverts = allverts.concat([0, 0, 0,  // bottom-left
-                                    1, 1, 0,  // top-right
-                                    0, 1, 0]); // top-left 
+        
+    //     allverts = allverts.concat([0, 0, 0,  // bottom-left
+    //                                 1, 0, 0,  // bottom-right
+    //                                 1, 1, 0]); // top-right
+        
+    //     uvCoords = uvCoords.concat([0, 0, 1, 0, 1, 1]);
 
-        // Back face (counter-clockwise order)
-        allverts = allverts.concat([1, 0, 1,  // bottom-left
-                                    0, 0, 1,  // bottom-right
-                                    0, 1, 1]); // top-right
+    //     // Front face (continued, second triangle)
+    //     allverts = allverts.concat([0, 0, 0,  // bottom-left
+    //                                 1, 1, 0,  // top-right
+    //                                 0, 1, 0]); // top-left 
 
-        // Back face (continued, second triangle)
-        allverts = allverts.concat([1, 0, 1,  // bottom-left
-                                    0, 1, 1,  // top-right
-                                    1, 1, 1]); // top-left 
+    //     uvCoords = uvCoords.concat([0, 0, 1, 1, 0, 1]);
 
-        // Top face (counter-clockwise order)
-        allverts = allverts.concat([0, 1, 0,  // bottom-left
-                                    1, 1, 0,  // bottom-right
-                                    1, 1, 1]); // top-right
+    //     // Back face (counter-clockwise order)
+    //     allverts = allverts.concat([1, 0, 1,  // bottom-left
+    //                                 0, 0, 1,  // bottom-right
+    //                                 0, 1, 1]); // top-right
+    //     uvCoords = uvCoords.concat([1, 0, 0, 0, 0, 1]);
 
-        // Top face (continued, second triangle)
-        allverts = allverts.concat([0, 1, 0,  // bottom-left
-                                    1, 1, 1,  // top-right
-                                    0, 1, 1]); // top-left 
+    //     // Back face (continued, second triangle)
+    //     allverts = allverts.concat([1, 0, 1,  // bottom-left
+    //                                 0, 1, 1,  // top-right
+    //                                 1, 1, 1]); // top-left 
+    //     uvCoords = uvCoords.concat([1, 0, 0, 1, 1, 1]);
 
-        // Bottom face (counter-clockwise order)
-        allverts = allverts.concat([0, 0, 0,  // bottom-left
-                                    1, 0, 0,  // bottom-right
-                                    1, 0, 1]); // top-right
+    //     // Top face (counter-clockwise order)
+    //     allverts = allverts.concat([0, 1, 0,  // bottom-left
+    //                                 1, 1, 0,  // bottom-right
+    //                                 1, 1, 1]); // top-right
+    //     uvCoords = uvCoords.concat([0, 1, 1, 1, 1, 0]);
 
-        // Bottom face (continued, second triangle)
-        allverts = allverts.concat([0, 0, 0,  // bottom-left
-                                    1, 0, 1,  // top-right
-                                    0, 0, 1]); // top-left 
+        
+    //                                 // Top face (continued, second triangle)
+    //     allverts = allverts.concat([0, 1, 0,  // bottom-left
+    //                                 1, 1, 1,  // top-right
+    //                                 0, 1, 1]); // top-left 
+    //     uvCoords = uvCoords.concat([0, 1, 1, 0, 0, 1]);
+    //     // Bottom face (counter-clockwise order)
+    //     allverts = allverts.concat([0, 0, 0,  // bottom-left
+    //                                 1, 0, 0,  // bottom-right
+    //                                 1, 0, 1]); // top-right
+    //     uvCoords = uvCoords.concat([0, 0, 1, 0, 1, 1]);
 
-        // Right face (counter-clockwise order)
-        allverts = allverts.concat([1, 0, 0,  // bottom-left
-                                    1, 1, 0,  // bottom-right
-                                    1, 1, 1]); // top-right
+    //     // Bottom face (continued, second triangle)
+    //     allverts = allverts.concat([0, 0, 0,  // bottom-left
+    //                                 1, 0, 1,  // top-right
+    //                                 0, 0, 1]); // top-left 
+    //     uvCoords = uvCoords.concat([0, 0, 1, 1, 0, 0]);
+    //     // Right face (counter-clockwise order)
+    //     allverts = allverts.concat([1, 0, 0,  // bottom-left
+    //                                 1, 1, 0,  // bottom-right
+    //                                 1, 1, 1]); // top-right
 
-        // Right face (continued, second triangle)
-        allverts = allverts.concat([1, 0, 0,  // bottom-left
-                                    1, 1, 1,  // top-right
-                                    1, 0, 1]); // top-left 
+    //     // Right face (continued, second triangle)
+    //     allverts = allverts.concat([1, 0, 0,  // bottom-left
+    //                                 1, 1, 1,  // top-right
+    //                                 1, 0, 1]); // top-left 
+        
+    //     uvCoords = uvCoords.concat([0.5, 0, 0.5, 1, 1, 1]);
+    //     // Left face (counter-clockwise order)
+    //     allverts = allverts.concat([0, 0, 0,  // bottom-left
+    //                                 0, 1, 0,  // bottom-right
+    //                                 0, 1, 1]); // top-right
+    //     uvCoords = uvCoords.concat([0, 0, 0, 1, 0.5, 1]);
+    //     // Left face (continued, second triangle)
+    //     allverts = allverts.concat([0, 0, 0,  // bottom-left
+    //                                 0, 1, 1,  // top-right
+    //                                 0, 0, 1]); // top-left 
 
-        // Left face (counter-clockwise order)
-        allverts = allverts.concat([0, 0, 0,  // bottom-left
-                                    0, 1, 0,  // bottom-right
-                                    0, 1, 1]); // top-right
-
-        // Left face (continued, second triangle)
-        allverts = allverts.concat([0, 0, 0,  // bottom-left
-                                    0, 1, 1,  // top-right
-                                    0, 0, 1]); // top-left 
-
-        //Assuming you have a function to bind and draw attributes and buffers
-        drawTriangle3D(allverts);
-        // for (var i = 0; i < allverts.length; i += 9) {
-        //     drawTriangle3D(allverts.slice(i, i + 9));
-        //   }
-        //drawTriangle3D(allverts);
-      }
+    //     //Assuming you have a function to bind and draw attributes and buffers
+    //     //drawTriangle3D(allverts);
+    //     drawTriangle3DUV(allverts, uvCoords);
+    //     //drawTriangle3DUV(uvCoords + allverts);
+    //     //drawTriangle3DUV(uvCoords);
+    //     // for (var i = 0; i < allverts.length; i += 9) {
+    //     //     drawTriangle3D(allverts.slice(i, i + 9));
+    //     //   }
+    //     //drawTriangle3D(allverts);
+    //   }
       
     drawCube(M, color) {
         // Set the color uniform variable

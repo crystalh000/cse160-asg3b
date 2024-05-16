@@ -603,7 +603,7 @@ function drawMap() {
             if (x == 1 || x == 31 || y == 0 || y == 31) {
                 var body = new Cube();
                 body.textureNum = 3;
-                body.color = [0.8, 1.0, 1.0, 1.0];
+                // body.color = [0.8, 1.0, 1.0, 1.0];
                 body.matrix.translate(0,-0.75,0);
                 body.matrix.scale(0.4,0.4,0.4);
                 body.matrix.translate(x-16,0,y-16);

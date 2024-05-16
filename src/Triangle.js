@@ -108,30 +108,64 @@ function drawTriangle3D(vertices) {
     // return n;
   }
 
-  function drawTriangle3DUV(vertices,uv) {
-    var n = 3;
+  // function drawTriangle3DUV(vertices,uv) {
+  //   var n = vertices.length / 3;
+  //   var vertexBuffer = gl.createBuffer();
+  //   if (!vertexBuffer) {
+  //     console.log('Failed to create the buffer object');
+  //     return -1;
+  //   }
+  //   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  //   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices),gl.DYNAMIC_DRAW);
+  //   gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
+  //   gl.enableVertexAttribArray(a_Position);
+    
+  //   // bind buffer object to target 
+  //   var uvBuffer = gl.createBuffer();
+  //   if (!uvBuffer) {
+  //     console.log('Failed to create the buffer object');
+  //     return -1;
+  //   }
+  //   gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+  //   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv),gl.DYNAMIC_DRAW);
+  //   gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
+    
+  //   gl.enableVertexAttribArray(a_UV);
+  //   gl.drawArrays(gl.TRIANGLES, 0, n);
+  //   gl.disableVertexAttribArray(a_UV);
+
+  // }
+
+  function drawTriangle3DUV(vertices, uv) {
+    var n = vertices.length / 3; // number of vertices (each vertex has 3 components: x, y, z)
+
+    // Create and bind the vertex buffer
     var vertexBuffer = gl.createBuffer();
     if (!vertexBuffer) {
-      console.log('Failed to create the buffer object');
-      return -1;
+        console.log('Failed to create the buffer object');
+        return -1;
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices),gl.DYNAMIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
     gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(a_Position);
-    
-    // bind buffer object to target 
+
+    // Create and bind the UV buffer
     var uvBuffer = gl.createBuffer();
     if (!uvBuffer) {
-      console.log('Failed to create the buffer object');
-      return -1;
+        console.log('Failed to create the buffer object');
+        return -1;
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv),gl.DYNAMIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv), gl.STATIC_DRAW);
     gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
-    
     gl.enableVertexAttribArray(a_UV);
-    gl.drawArrays(gl.TRIANGLES, 0, n);
-    gl.disableVertexAttribArray(a_UV);
 
-  }
+    // Draw the triangles
+    gl.drawArrays(gl.TRIANGLES, 0, n);
+
+    // Cleanup
+    gl.disableVertexAttribArray(a_Position);
+    gl.disableVertexAttribArray(a_UV);
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
+}
