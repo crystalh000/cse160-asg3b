@@ -1,7 +1,7 @@
 
 // Import the drawPicture function from Picture.js
 // import { drawPicture } from './Picture.js';
-
+// import Camera from './Camera.js';
 // ColoredPoint.js (c) 2012 matsuda
 // Vertex shader program
 var VSHADER_SOURCE = `
@@ -51,6 +51,8 @@ var FSHADER_SOURCE =`
 
 // Global Variables
 let canvas;
+let camera;
+let u_whichTexture;
 let gl;
 let a_Position;
 let a_UV;
@@ -104,12 +106,12 @@ function setUpWebGL() {
      return;
    }
    gl.enable(gl.DEPTH_TEST);
-   console.log("gl.COMPILE_STATUS:", gl.COMPILE_STATUS);
+   //console.log("gl.COMPILE_STATUS:", gl.COMPILE_STATUS);
    if (!gl.COMPILE_STATUS) {
         console.log("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
    }
 //    gl.getProgramParameter(program, gl.LINK_STATUS);
-    console.log("gl.LINK_STATUS:", gl.LINK_STATUS);
+    //console.log("gl.LINK_STATUS:", gl.LINK_STATUS);
 
   //  // Specify the depth function, the default is gl.LESS
   //  gl.depthFunc(gl.LEQUAL);
@@ -118,6 +120,33 @@ function setUpWebGL() {
 //    gl.clearDepth(1.0);
    gl.clear(gl.DEPTH_BUFFER_BIT);
 
+}
+
+// code given from ChatGPT
+function handleKeyDown(event) {
+  const speed = 0.1;
+  const alpha = 5;
+
+  switch (event.key) {
+      case 'w':
+          camera.moveForward(speed);
+          break;
+      case 's':
+          camera.moveBackwards(speed);
+          break;
+      case 'a':
+          camera.moveLeft(speed);
+          break;
+      case 'd':
+          camera.moveRight(speed);
+          break;
+      case 'q':
+          camera.panLeft(alpha);
+          break;
+      case 'e':
+          camera.panRight(alpha);
+          break;
+  }
 }
 
 function connectVariablesToGLSL() {
@@ -352,10 +381,19 @@ function sendImageToTEXTURE3(image) {
   console.log('finished loadTexture3');
 }
 
+
+function tick() {
+  renderAllShapes();
+  requestAnimationFrame(tick);
+}
+
 function main() {
   // Set up canvas and get gl variables
   setUpWebGL();
 
+  camera = new Camera(canvas); // recommended from ChatGPT
+  document.addEventListener('keydown', handleKeyDown);
+  tick();
   // Set up GLSL shader programs and connect JS variables to GLSL
   connectVariablesToGLSL();
 
@@ -429,8 +467,8 @@ var g_seconds=performance.now() / 1000.0 - g_startTime;
 
 function tick() {
   // print some debug information so we know we are running
-  g_seconds = performance.now() / 1000.0 - g_startTime;
-  console.log(performance.now());
+  // g_seconds = performance.now() / 1000.0 - g_startTime;
+  // console.log(performance.now());
 
   updateAnimationAngles();
 
@@ -617,39 +655,65 @@ function drawMap() {
 
 function renderAllShapes() {
   // Check the time at the start of the function
+//   var startTime = performance.now();
+
+//   // makes viewing the blocks possible
+// //   var projMat = new Matrix4();
+// //   projMat.setPerspective(50, 1*canvas.width/canvas.height, 1, 100); // Near plane is 0.1, far plane is 50
+// //   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
+  
+// //   var viewMat = new Matrix4();
+// // //   viewMat.setLookAt(0,0,3, 0,0,-100, 0,1,0);
+// //   // viewMat.setLookAt(
+// //   //   // g_camera.eye.x,g_camera.eye.y, g_camera.eye.z, 
+// //   //   // g_camera.at.x, g_camera.at.y, g_camera.at.z, 
+// //   //   // g_camera.up.x,g_camera.up.y, g_camera.up.z
+// //   //   g_eye[0],g_eye[1],g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0],g_up[1],g_up[2]
+// //   // );
+// //   // viewMat.setLookAt(g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2], g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2], g_camera.up.elements[0], g_camera.up.elements[1], g_camera.up.elements[2]);
+  
+// //   viewMat.setLookAt(
+// //     // g_camera.eye.x,g_camera.eye.y, g_camera.eye.z, 
+// //     // g_camera.at.x, g_camera.at.y, g_camera.at.z, 
+// //     // g_camera.up.x,g_camera.up.y, g_camera.up.z
+// //     g_eye[0],g_eye[1],g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0],g_up[1],g_up[2]
+// //   );
+// //   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
+
+// gl.uniformMatrix4fv(u_ProjectionMatrix, false, camera.projectionMatrix.elements);
+// gl.uniformMatrix4fv(u_ViewMatrix, false, camera.viewMatrix.elements);
+
+// // Pass the global rotation matrix
+// var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0);
+// gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
+// // Pass the matrix to u_ModelMatrix.attribute
+// var globalRotMat=new Matrix4().rotate(g_globalAngle, 0,1,0);
+// gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
+
+// // Clear <canvas>
+// gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+// drawMap();
+
+//   // Clear <canvas>
+//   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+//   gl.clear(gl.COLOR_BUFFER_BIT);
+
+//   drawMap();
+
   var startTime = performance.now();
 
-  // makes viewing the blocks possible
-  var projMat = new Matrix4();
-  projMat.setPerspective(50, 1*canvas.width/canvas.height, 1, 100); // Near plane is 0.1, far plane is 50
-  gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
-  
-  var viewMat = new Matrix4();
-//   viewMat.setLookAt(0,0,3, 0,0,-100, 0,1,0);
-  // viewMat.setLookAt(
-  //   // g_camera.eye.x,g_camera.eye.y, g_camera.eye.z, 
-  //   // g_camera.at.x, g_camera.at.y, g_camera.at.z, 
-  //   // g_camera.up.x,g_camera.up.y, g_camera.up.z
-  //   g_eye[0],g_eye[1],g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0],g_up[1],g_up[2]
-  // );
-  // viewMat.setLookAt(g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2], g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2], g_camera.up.elements[0], g_camera.up.elements[1], g_camera.up.elements[2]);
-  
-  viewMat.setLookAt(
-    // g_camera.eye.x,g_camera.eye.y, g_camera.eye.z, 
-    // g_camera.at.x, g_camera.at.y, g_camera.at.z, 
-    // g_camera.up.x,g_camera.up.y, g_camera.up.z
-    g_eye[0],g_eye[1],g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0],g_up[1],g_up[2]
-  );
-  gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
+  // Update and set the view and projection matrices using the camera
+  gl.uniformMatrix4fv(u_ProjectionMatrix, false, camera.projectionMatrix.elements);
+  gl.uniformMatrix4fv(u_ViewMatrix, false, camera.viewMatrix.elements);
 
-  // Pass the matrix to u_ModelMatrix.attribute
-  var globalRotMat=new Matrix4().rotate(g_globalAngle, 0,1,0);
+  // Pass the global rotation matrix
+  var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  gl.clear(gl.COLOR_BUFFER_BIT);
 
   drawMap();
   
