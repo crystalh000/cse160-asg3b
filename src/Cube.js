@@ -79,90 +79,6 @@ class Cube {
 
     }
 
-    // renderfast() {
-    //     var rgba = this.color;
-    //     gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
-    //     gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
-    //     var allverts = [];
-        
-    //     // // front of cube
-    //     allverts = allverts.concat([0, 0, 0,   1, 1, 0,   1, 0, 0]);
-    //     allverts = allverts.concat([0, 0, 0,   0, 1, 0,   1, 1, 0]);
-        
-    //     // top of cube
-    //     allverts = allverts.concat([0,1,0,   0,1,1,   1,1,1]);
-    //     allverts = allverts.concat([0,1,0, 1,1,1, 1,1,0]);
-
-    //     // right of cube
-    //     allverts = allverts.concat([1,1,0, 1,1,1, 1,0,0]);
-    //     allverts=allverts.concat([1,0,0, 1,1,1,  1,0,1]);
-
-    //     // left of cube
-    //     allverts=allverts.concat([0,1,0,  0,1,1, 0,0,0]);
-    //     allverts=allverts.concat([0,0,0, 0,1,1, 0,0,1]);
-    
-    //     // bottom of cube
-    //     allverts = allverts.concat([0,0,1, 1,1,1, 1,0,1]);
-    //     allverts = allverts.concat([0,0,1, 0,1,1, 1,1,1]);
-    //     drawTriangle3D(allverts);
-    // }   
-    // renderfast() {
-    //     var rgba = this.color;
-    //     gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
-    //     gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
-    //     var allverts = [];
-    //     // front of cube
-    //     allverts = allverts.concat([0, 0, 0,   1, 0, 0,   1, 1, 0]);
-    //     allverts = allverts.concat([0, 0, 0,   1, 1, 0,   0, 1, 0]);
-        
-    //     // top of cube
-    //     allverts = allverts.concat([0, 1, 0,   1, 1, 0,   1, 1, 1]);
-    //     allverts = allverts.concat([0, 1, 0,   1, 1, 1,   0, 1, 1]);
-
-    //     // right of cube
-    //     allverts = allverts.concat([1, 0, 0,   1, 0, 1,   1, 1, 1]);
-    //     allverts = allverts.concat([1, 0, 0,   1, 1, 1,   1, 1, 0]);
-
-    //     // left of cube
-    //     allverts = allverts.concat([0, 0, 0,   0, 0, 1,   0, 1, 1]);
-    //     allverts = allverts.concat([0, 0, 0,   0, 1, 1,   0, 1, 0]);
-
-    //     // bottom of cube
-    //     allverts = allverts.concat([0, 0, 0,   1, 0, 0,   1, 0, 1]);
-    //     allverts = allverts.concat([0, 0, 0,   1, 0, 1,   0, 0, 1]);
-
-    //     // back of cube
-    //     allverts = allverts.concat([0, 0, 1,   1, 0, 1,   1, 1, 1]);
-    //     allverts = allverts.concat([0, 0, 1,   1, 1, 1,   0, 1, 1]);
-
-    //     drawTriangle3D(allverts);
-    //     // front of cube
-    //     // allverts = allverts.concat([0, 0, 0,   1, 0, 0,   1, 1, 0]);
-    //     // allverts = allverts.concat([0, 0, 0,   1, 1, 0,   0, 1, 0]);
-        
-    //     // // top of cube
-    //     // allverts = allverts.concat([0, 1, 0,   1, 1, 0,   1, 1, 1]);
-    //     // allverts = allverts.concat([0, 1, 0,   1, 1, 1,   0, 1, 1]);
-    
-    //     // // right of cube
-    //     // allverts = allverts.concat([1, 0, 0,   1, 0, 1,   1, 1, 1]);
-    //     // allverts = allverts.concat([1, 0, 0,   1, 1, 1,   1, 1, 0]);
-    
-    //     // // left of cube
-    //     // allverts = allverts.concat([0, 0, 0,   0, 1, 0,   0, 1, 1]);
-    //     // allverts = allverts.concat([0, 0, 0,   0, 1, 1,   0, 0, 1]);
-    
-    //     // // bottom of cube
-    //     // allverts = allverts.concat([0, 0, 0,   1, 0, 0,   1, 0, 1]);
-    //     // allverts = allverts.concat([0, 0, 0,   1, 0, 1,   0, 0, 1]);
-    
-    //     // // back of cube
-    //     // allverts = allverts.concat([0, 0, 1,   1, 0, 1,   1, 1, 1]);
-    //     // allverts = allverts.concat([0, 0, 1,   1, 1, 1,   0, 1, 1]);
-    
-    //     // drawTriangle3D(allverts);
-    // }
-
     // used Gemini to assist with the renderfast() function
     renderfast() {
         var rgba = this.color;
@@ -233,9 +149,9 @@ class Cube {
 
         //Assuming you have a function to bind and draw attributes and buffers
         drawTriangle3D(allverts);
-        for (var i = 0; i < allverts.length; i += 9) {
-            drawTriangle3D(allverts.slice(i, i + 9));
-          }
+        // for (var i = 0; i < allverts.length; i += 9) {
+        //     drawTriangle3D(allverts.slice(i, i + 9));
+        //   }
         //drawTriangle3D(allverts);
       }
       

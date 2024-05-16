@@ -103,7 +103,7 @@ function drawTriangle3D(vertices) {
     // Enable the assignment to a_Position variable
     gl.enableVertexAttribArray(a_Position);
   
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    gl.drawArrays(gl.TRIANGLES, 0, n);
   
     // return n;
   }
@@ -129,7 +129,9 @@ function drawTriangle3D(vertices) {
     gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv),gl.DYNAMIC_DRAW);
     gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
+    
     gl.enableVertexAttribArray(a_UV);
     gl.drawArrays(gl.TRIANGLES, 0, n);
+    gl.disableVertexAttribArray(a_UV);
 
   }
