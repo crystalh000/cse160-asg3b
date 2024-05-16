@@ -539,18 +539,18 @@ for (var i = 0; i < 32; i++) {
     }
 }
 
-function drawWorld() {
-  for (var i = 0; i < 32; i++) {
-      for (var j = 0; j < 32; j++) {
-          for (var k = 0; k < worldLayout[i][j]; k++) {
-              var cube = new Cube();
-              cube.textureNum = 1; // Use the texture you want for the walls
-              cube.matrix.translate(i, k, j);
-              cube.render();
-          }
-      }
-  }
-}
+// function drawWorld() {
+//   for (var i = 0; i < 32; i++) {
+//       for (var j = 0; j < 32; j++) {
+//           for (var k = 0; k < worldLayout[i][j]; k++) {
+//               var cube = new Cube();
+//               cube.textureNum = 1; // Use the texture you want for the walls
+//               cube.matrix.translate(i, k, j);
+//               cube.render();
+//           }
+//       }
+//   }
+// }
 
 
 

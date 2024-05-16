@@ -166,6 +166,7 @@ class Cube {
     // used Gemini to assist with the renderfast() function
     renderfast() {
         var rgba = this.color;
+        gl.uniform1i(u_whichTexture, this.textureNum);
         gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
         gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
         var allverts = [];
@@ -230,11 +231,12 @@ class Cube {
                                     0, 1, 1,  // top-right
                                     0, 0, 1]); // top-left 
 
-        // Assuming you have a function to bind and draw attributes and buffers
-        // drawTriangle3D(allverts);
+        //Assuming you have a function to bind and draw attributes and buffers
+        drawTriangle3D(allverts);
         for (var i = 0; i < allverts.length; i += 9) {
             drawTriangle3D(allverts.slice(i, i + 9));
           }
+        //drawTriangle3D(allverts);
       }
       
     drawCube(M, color) {
