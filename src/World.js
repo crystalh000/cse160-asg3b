@@ -51,7 +51,7 @@ var FSHADER_SOURCE =`
 
 // Global Variables
 let canvas;
-let camera;
+let g_camera;
 let u_whichTexture;
 let gl;
 let a_Position;
@@ -125,26 +125,27 @@ function setUpWebGL() {
 // code given from ChatGPT
 function handleKeyDown(event) {
   const speed = 0.1;
-  const alpha = 5;
+  const alpha = 45 * Math.PI / 180; // convert to radians
+
 
   switch (event.key) {
       case 'w':
-          camera.moveForward(speed);
+          g_camera.moveForward(speed);
           break;
       case 's':
-          camera.moveBackwards(speed);
+          g_camera.moveBackwards(speed);
           break;
       case 'a':
-          camera.moveLeft(speed);
+          g_camera.moveLeft(speed);
           break;
       case 'd':
-          camera.moveRight(speed);
+          g_camera.moveRight(speed);
           break;
       case 'q':
-          camera.panLeft(alpha);
+          g_camera.panLeft(alpha);
           break;
       case 'e':
-          camera.panRight(alpha);
+          g_camera.panRight(alpha);
           break;
   }
 }
@@ -390,8 +391,8 @@ function tick() {
 function main() {
   // Set up canvas and get gl variables
   setUpWebGL();
-
-  camera = new Camera(canvas); // recommended from ChatGPT
+  // const canvas = document.getElementById('webgl');
+  // g_camera = new Camera(canvas); // recommended from ChatGPT
   document.addEventListener('keydown', handleKeyDown);
   tick();
   // Set up GLSL shader programs and connect JS variables to GLSL
@@ -433,7 +434,7 @@ function main() {
     // Clear <canvas>
     // gl.clear(gl.COLOR_BUFFER_BIT);
     // renderAllShapes();
-    requestAnimationFrame(tick);
+    //requestAnimationFrame(tick);
 
 }
 
@@ -620,9 +621,8 @@ for (var i = 0; i < 32; i++) {
 var g_eye = [0,0,3];
 var g_at = [0,0,-100];
 var g_up = [0,1,0];
-
-// var g_camera = new Camera(canvas);
-var g_camera = new Camera();
+canvas = document.getElementById('webgl');
+g_camera = new Camera(canvas);
 
 var g_map = [
     [1,1,1,1,1,1,1,1],
@@ -705,8 +705,8 @@ function renderAllShapes() {
   var startTime = performance.now();
 
   // Update and set the view and projection matrices using the camera
-  gl.uniformMatrix4fv(u_ProjectionMatrix, false, camera.projectionMatrix.elements);
-  gl.uniformMatrix4fv(u_ViewMatrix, false, camera.viewMatrix.elements);
+  gl.uniformMatrix4fv(u_ProjectionMatrix, false, g_camera.projectionMatrix.elements);
+  gl.uniformMatrix4fv(u_ViewMatrix, false, g_camera.viewMatrix.elements);
 
   // Pass the global rotation matrix
   var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0);
