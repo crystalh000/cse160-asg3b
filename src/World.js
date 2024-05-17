@@ -1,7 +1,4 @@
 
-// Import the drawPicture function from Picture.js
-// import { drawPicture } from './Picture.js';
-// import Camera from './Camera.js';
 // ColoredPoint.js (c) 2012 matsuda
 // Vertex shader program
 var VSHADER_SOURCE = `
@@ -91,42 +88,75 @@ var g_jumpHeight = 0;
 var animalXRotation = 0;
 var animalYRotation = 0;
 
+let cubesData = [];
+const numCubes = 12; // Number of cubes to generate
+const worldSize = 32; // Size of the world
 
+let bunniesHappiness = 0;
 
 function setUpWebGL() {
    // Retrieve <canvas> element
    canvas = document.getElementById('webgl');
-   // Get the rendering context for WebGL
-   //gl = getWebGLContext(canvas);
    gl = canvas.getContext("webgl", { preserveDrawingBuffer: true });
-
    if (!gl) {
      console.log('Failed to get the rendering context for WebGL');
      return;
    }
    gl.enable(gl.DEPTH_TEST);
-   //console.log("gl.COMPILE_STATUS:", gl.COMPILE_STATUS);
-   if (!gl.COMPILE_STATUS) {
-        console.log("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
-   }
-//    gl.getProgramParameter(program, gl.LINK_STATUS);
-    //console.log("gl.LINK_STATUS:", gl.LINK_STATUS);
-
-  //  // Specify the depth function, the default is gl.LESS
-  //  gl.depthFunc(gl.LEQUAL);
-
-  //  // Clear the depth buffer
-//    gl.clearDepth(1.0);
    gl.clear(gl.DEPTH_BUFFER_BIT);
+   // generate initial random cubes
+   generateRandomCubes();
+}
 
+
+function generateRandomCubes() {
+  cubesData = [];
+  const worldSize = 16;
+  for (let i = 0; i < numCubes; i++) {
+    const x = Math.floor(Math.random() * worldSize);
+    const y = Math.floor(Math.random() * worldSize);
+    cubesData.push({ x: x, y: y, color: [1, 1, 1, 1] });
+  }
+}
+
+function drawCubes() {
+  for (const cube of cubesData) {
+    const block = new Cube();
+    block.color = cube.color;
+    block.textureNum = -2;
+    block.matrix.translate(cube.x - 16, 0.1, cube.y - 16);
+    block.matrix.scale(0.1, 0.1, 0.1);
+    block.render();
+  }
+}
+
+
+function handleMouseClick(event) {
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  // Convert click coordinates to world coordinates
+  const worldX = Math.floor((x / canvas.width) * worldSize);
+  const worldY = Math.floor((y / canvas.height) * worldSize);
+
+  // Check if a cube exists at the clicked position
+  const cubeIndex = cubesData.findIndex(cube => cube.x === worldX && cube.y === worldY);
+
+  if (cubeIndex !== -1) {
+    // Remove cube and update Bunnie's Happiness
+    cubesData.splice(cubeIndex, 1);
+    if (bunniesHappiness < 20) {
+      bunniesHappiness++;
+    }
+  }
+  document.getElementById('happinessCounter').innerText = bunniesHappiness;
 }
 
 // code given from ChatGPT
 function handleKeyDown(event) {
   const speed = 0.1;
   const alpha = 45 * Math.PI / 180; // convert to radians
-
-
   switch (event.key) {
       case 'w':
           g_camera.moveForward(speed);
@@ -239,17 +269,29 @@ function connectVariablesToGLSL() {
   
 }
 
-// Constants
-const POINT = 0;
-const TRIANGLE = 1;
-const CIRCLE = 2;
-const PICTURE = 3;
 
-// Globals related to UI elements
-let g_selectedColor = [1.0,1.0,1.0,1.0]; // Default white
-let g_selectedSize = 5;
-let g_selectedType = POINT;
-let g_selectedSegments = 10;
+function main() {
+  // Set up canvas and get gl variables
+  setUpWebGL();
+  //canvas = document.getElementById('webgl');
+  g_camera = new Camera(canvas); // recommended from ChatGPT
+  document.addEventListener('keydown', handleKeyDown);
+  canvas.addEventListener('click', handleMouseClick);
+
+  tick();
+  // Set up GLSL shader programs and connect JS variables to GLSL
+  connectVariablesToGLSL();
+
+  // Set up actions for the HTML UI Elements
+  addActionsForHTMLUI();
+
+  // // for keyboard input
+  // document.onkeydown = keydown;
+
+  initTextures();
+
+}
+
 
 // Set up actions for the HTML UI elements
 function addActionsForHTMLUI() {
@@ -387,74 +429,6 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
-function main() {
-  // Set up canvas and get gl variables
-  setUpWebGL();
-  const canvas = document.getElementById('webgl');
-  g_camera = new Camera(canvas); // recommended from ChatGPT
-  document.addEventListener('keydown', handleKeyDown);
-  tick();
-  // Set up GLSL shader programs and connect JS variables to GLSL
-  connectVariablesToGLSL();
-
-  // Set up actions for the HTML UI Elements
-  addActionsForHTMLUI();
-
-  // for keyboard input
-  document.onkeydown = keydown;
-
-  initTextures();
-
-  // code for the world layout from ChatGPT and office hours with Rohan
-  // Process the 32x32 image and set the world layout
-  // const imageUrl = '../lib/swirl.jpg'; // Replace with your image URL
-  // loadImage(imageUrl, function(pixels) {
-  //   drawSpiral(pixels);
-  //   requestAnimationFrame(tick);
-  // });
-
-
-  // Function to load an image and process it
-// function loadImage(url, callback) {
-//   const image = new Image();
-//   image.crossOrigin = "anonymous";
-//   image.onload = function() {
-//     const canvas = document.createElement('canvas');
-//     canvas.width = 32;
-//     canvas.height = 32;
-//     const context = canvas.getContext('2d');
-//     context.drawImage(image, 0, 0, 32, 32);
-//     const imageData = context.getImageData(0, 0, 32, 32);
-//     callback(imageData.data);
-//   };
-//   image.src = url;
-// }
-// function drawWorld(pixels) {
-//   const centerX = 16;
-//   const centerY = 16;
-//   let radius = 0;
-//   let angle = 0;
-
-//   for (let i = 0; i < 32 * 32; i++) {
-//     const x = Math.floor(centerX + radius * Math.cos(angle));
-//     const y = Math.floor(centerY + radius * Math.sin(angle));
-
-//     const index = (y * 32 + x) * 4;
-//     const r = pixels[index];
-//     const g = pixels[index + 1];
-//     const b = pixels[index + 2];
-
-//     const color = [r / 255, g / 255, b / 255, 1.0];
-//     const block = new Cube();
-//     block.color = color;
-//     block.textureNum = -2; // Use color instead of texture
-//     block.matrix.translate(x - 16, 0, y - 16); // Adjust translation to center the world
-//     block.render();
-
-//     angle += Math.PI / 16;
-//     radius += 0.1;
-//   }
-}
 
 
   // rotation of animal using mouse
@@ -487,43 +461,12 @@ function main() {
     // renderAllShapes();
     //requestAnimationFrame(tick);
 
-
-
-
-// canvas.addEventListener('keydown', (event) => {
-//   switch (event.key) {
-//     case 'w':
-//       g_camera.forward();
-//       break;
-//     case 'a':
-//       g_camera.left();
-//       break;
-//     case 's':
-//       g_camera.back();
-//       break;
-//     case 'd':
-//       g_camera.right();
-//       break;
-//     case 'q':
-//       // Implement camera rotation left (optional)
-//       break;
-//     case 'e':
-//       // Implement camera rotation right (optional)
-//       break;
-//   }
-// });
-
-var g_startTime=performance.now() / 1000.0;
-var g_seconds=performance.now() / 1000.0 - g_startTime;
-// called by browser repeatedly whenever it's time
+  var g_startTime=performance.now() / 1000.0;
+  var g_seconds=performance.now() / 1000.0 - g_startTime;
+  // called by browser repeatedly whenever it's time
 
 function tick() {
-  // print some debug information so we know we are running
-  // g_seconds = performance.now() / 1000.0 - g_startTime;
-  // console.log(performance.now());
-
   updateAnimationAngles();
-
   // draw everything
   renderAllShapes();
   // tell the browser to update again
@@ -532,10 +475,6 @@ function tick() {
 
 
 var g_shapesList = [];
-
-// var g_points = [];  // The array for the position of a mouse press
-// var g_colors = [];  // The array to store the color of a point
-// var g_sizes = []; // The array to store the size of a point
 
 function click(ev) {
   // Extract the event click and return it in WebGL
@@ -653,26 +592,10 @@ for (var i = 0; i < 32; i++) {
     }
 }
 
-// function drawWorld() {
-//   for (var i = 0; i < 32; i++) {
-//       for (var j = 0; j < 32; j++) {
-//           for (var k = 0; k < worldLayout[i][j]; k++) {
-//               var cube = new Cube();
-//               cube.textureNum = 1; // Use the texture you want for the walls
-//               cube.matrix.translate(i, k, j);
-//               cube.render();
-//           }
-//       }
-//   }
-// }
-
-
-
-
 var g_eye = [0,0,3];
 var g_at = [0,0,-100];
 var g_up = [0,1,0];
-// canvas = document.getElementById('webgl');
+//canvas = document.getElementById('webgl');
 // g_camera = new Camera(canvas);
 
 var g_map = [
@@ -687,20 +610,20 @@ var g_map = [
 ];
 
 
-function loadImage(url, callback) {
-  const image = new Image();
-  image.crossOrigin = "anonymous";
-  image.onload = function() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 32;
-    canvas.height = 32;
-    const context = canvas.getContext('2d');
-    context.drawImage(image, 0, 0, 32, 32);
-    const imageData = context.getImageData(0, 0, 32, 32);
-    callback(imageData.data);
-  };
-  image.src = url;
-}
+// function loadImage(url, callback) {
+//   const image = new Image();
+//   image.crossOrigin = "anonymous";
+//   image.onload = function() {
+//     const canvas = document.createElement('canvas');
+//     canvas.width = 32;
+//     canvas.height = 32;
+//     const context = canvas.getContext('2d');
+//     context.drawImage(image, 0, 0, 32, 32);
+//     const imageData = context.getImageData(0, 0, 32, 32);
+//     callback(imageData.data);
+//   };
+//   image.src = url;
+// }
 
 function drawMap() {
     for(x=0; x < 32; x++) {
@@ -718,34 +641,28 @@ function drawMap() {
     }
 }
 
-function drawSpiral() {
-  const centerX = 16;
-  const centerY = 16;
-  let radius = 0;
-  let angle = 0;
+function initializeCubes() {
+  for (let i = 0; i < numCubes; i++) {
+    const x = Math.floor(Math.random() * worldSize);
+    const y = Math.floor(Math.random() * worldSize);
+    const color = [Math.random(), Math.random(), Math.random(), 1]; // Random color for each cube
 
-  // Limit the number of cubes
-  const numCubes = 12;
-  const turns = numCubes; // One cube per turn
-
-  for (let i = 0; i < turns; i++) {
-    const x = Math.floor(centerX + radius * Math.cos(angle));
-    const y = Math.floor(centerY + radius * Math.sin(angle));
-
-    // Ensure x and y are within the bounds of the world
-    if (x >= 0 && x < 32 && y >= 0 && y < 32) {
-      const block = new Cube();
-      block.color = [1, 1, 1, 1]; // Set color to white
-      block.textureNum = -2; // Use color instead of texture
-      block.matrix.translate(x - 16, 0.1, y - 16); // Adjust translation to place the spiral on top of the plane
-      block.matrix.scale(0.1, 0.1, 0.1); // Scale down the size of the cube
-      block.render();
-    }
-
-    angle += 2 * Math.PI; // Increase angle by 2*PI to make one complete turn
-    radius += 1; // Increase radius to spread out the cubes
+    // Store cube data
+    cubesData.push({ x, y, color });
   }
 }
+
+function drawBees() {
+  cubesData.forEach(cube => {
+    const block = new Cube();
+    block.color = cube.color; // Set color to the stored value
+    block.textureNum = -2; // Use color instead of texture
+    block.matrix.translate(cube.x - 16, 0.1, cube.y - 16); // Adjust translation to place the cubes on top of the plane
+    block.matrix.scale(0.1, 0.1, 0.1); // Scale down the size of the cube
+    block.render();
+  });
+}
+
 
 
 // function drawSpiral() {
@@ -766,33 +683,6 @@ function drawSpiral() {
 //       block.matrix.translate(x - 16, 0, y - 16); // Adjust translation to center the world
 //       block.render();
 //     }
-
-//     angle += Math.PI / 16;
-//     radius += 0.1;
-//   }
-// }
-
-// function drawWorld(pixels) {
-//   const centerX = 16;
-//   const centerY = 16;
-//   let radius = 0;
-//   let angle = 0;
-
-//   for (let i = 0; i < 32 * 32; i++) {
-//     const x = Math.floor(centerX + radius * Math.cos(angle));
-//     const y = Math.floor(centerY + radius * Math.sin(angle));
-
-//     const index = (y * 32 + x) * 4;
-//     const r = pixels[index];
-//     const g = pixels[index + 1];
-//     const b = pixels[index + 2];
-
-//     const color = [r / 255, g / 255, b / 255, 1.0];
-//     const block = new Cube();
-//     block.color = color;
-//     block.textureNum = -2; // Use color instead of texture
-//     block.matrix.translate(x - 16, 0, y - 16); // Adjust translation to center the world
-//     block.render();
 
 //     angle += Math.PI / 16;
 //     radius += 0.1;
@@ -829,113 +719,7 @@ function drawWorld(pixels) {
   }
 }
 
-
-
-
-// function drawSpiral() {
-//   const a = 0.1;
-//   const b = 0.1;
-//   const numCubes = 100;
-//   const angleStep = 0.2;
-  
-//   for (let i = 0; i < numCubes; i++) {
-//     const theta = i * angleStep;
-//     const r = a + b * theta;
-//     const x = r * Math.cos(theta);
-//     const y = r * Math.sin(theta);
-    
-//     const block = new Cube();
-//     block.color = [Math.random(), Math.random(), Math.random(), 1.0]; // Random colors for variety
-//     block.textureNum = -2; // Use color instead of texture
-//     block.matrix.translate(x, 0, y); // Adjust translation to center the world
-//     block.render();
-//   }
-// }
-
-// function drawSpiral() {
-//   // Define the properties of the spiral
-//   const turns = 5;
-//   const stepsPerTurn = 100;
-//   const height = 0.1;
-//   const radius = 1;
-
-//   // Create an array to hold the vertices of the spiral
-//   const vertices = [];
-
-//   // Calculate the vertices of the spiral
-//   for (let i = 0; i < turns * stepsPerTurn; i++) {
-//       const angle = 2 * Math.PI * i / stepsPerTurn;
-//       const x = radius * Math.cos(angle);
-//       const y = height * i / stepsPerTurn;
-//       const z = radius * Math.sin(angle);
-//       vertices.push(x, y, z);
-//   }
-
-//   // Create a buffer and load the vertices into it
-//   const buffer = gl.createBuffer();
-//   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-//   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
-//   // Tell WebGL how to interpret the data in the buffer
-//   gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
-//   gl.enableVertexAttribArray(a_Position);
-
-//   // Draw the spiral
-//   gl.drawArrays(gl.LINE_STRIP, 0, vertices.length / 3);
-// }
-
-
-
-
 function renderAllShapes() {
-  // Check the time at the start of the function
-//   var startTime = performance.now();
-
-//   // makes viewing the blocks possible
-// //   var projMat = new Matrix4();
-// //   projMat.setPerspective(50, 1*canvas.width/canvas.height, 1, 100); // Near plane is 0.1, far plane is 50
-// //   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
-  
-// //   var viewMat = new Matrix4();
-// // //   viewMat.setLookAt(0,0,3, 0,0,-100, 0,1,0);
-// //   // viewMat.setLookAt(
-// //   //   // g_camera.eye.x,g_camera.eye.y, g_camera.eye.z, 
-// //   //   // g_camera.at.x, g_camera.at.y, g_camera.at.z, 
-// //   //   // g_camera.up.x,g_camera.up.y, g_camera.up.z
-// //   //   g_eye[0],g_eye[1],g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0],g_up[1],g_up[2]
-// //   // );
-// //   // viewMat.setLookAt(g_camera.eye.elements[0], g_camera.eye.elements[1], g_camera.eye.elements[2], g_camera.at.elements[0], g_camera.at.elements[1], g_camera.at.elements[2], g_camera.up.elements[0], g_camera.up.elements[1], g_camera.up.elements[2]);
-  
-// //   viewMat.setLookAt(
-// //     // g_camera.eye.x,g_camera.eye.y, g_camera.eye.z, 
-// //     // g_camera.at.x, g_camera.at.y, g_camera.at.z, 
-// //     // g_camera.up.x,g_camera.up.y, g_camera.up.z
-// //     g_eye[0],g_eye[1],g_eye[2], g_at[0], g_at[1], g_at[2], g_up[0],g_up[1],g_up[2]
-// //   );
-// //   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
-
-// gl.uniformMatrix4fv(u_ProjectionMatrix, false, camera.projectionMatrix.elements);
-// gl.uniformMatrix4fv(u_ViewMatrix, false, camera.viewMatrix.elements);
-
-// // Pass the global rotation matrix
-// var globalRotMat = new Matrix4().rotate(g_globalAngle, 0, 1, 0);
-// gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
-// // Pass the matrix to u_ModelMatrix.attribute
-// var globalRotMat=new Matrix4().rotate(g_globalAngle, 0,1,0);
-// gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
-
-// // Clear <canvas>
-// gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-// drawMap();
-
-//   // Clear <canvas>
-//   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-//   gl.clear(gl.COLOR_BUFFER_BIT);
-
-//   drawMap();
-
   var startTime = performance.now();
 
   // Update and set the view and projection matrices using the camera
@@ -948,10 +732,10 @@ function renderAllShapes() {
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  
 
   drawMap();
-  drawSpiral();
-  //drawSpiral();
+  drawCubes();
   
   // draw the floor 
   var floor = new Cube();
