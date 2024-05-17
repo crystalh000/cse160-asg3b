@@ -96,7 +96,6 @@ var animalYRotation = 0;
 function setUpWebGL() {
    // Retrieve <canvas> element
    canvas = document.getElementById('webgl');
-
    // Get the rendering context for WebGL
    //gl = getWebGLContext(canvas);
    gl = canvas.getContext("webgl", { preserveDrawingBuffer: true });
@@ -391,8 +390,8 @@ function tick() {
 function main() {
   // Set up canvas and get gl variables
   setUpWebGL();
-  // const canvas = document.getElementById('webgl');
-  // g_camera = new Camera(canvas); // recommended from ChatGPT
+  const canvas = document.getElementById('webgl');
+  g_camera = new Camera(canvas); // recommended from ChatGPT
   document.addEventListener('keydown', handleKeyDown);
   tick();
   // Set up GLSL shader programs and connect JS variables to GLSL
@@ -405,6 +404,58 @@ function main() {
   document.onkeydown = keydown;
 
   initTextures();
+
+  // code for the world layout from ChatGPT and office hours with Rohan
+  // Process the 32x32 image and set the world layout
+  // const imageUrl = '../lib/swirl.jpg'; // Replace with your image URL
+  // loadImage(imageUrl, function(pixels) {
+  //   drawSpiral(pixels);
+  //   requestAnimationFrame(tick);
+  // });
+
+
+  // Function to load an image and process it
+// function loadImage(url, callback) {
+//   const image = new Image();
+//   image.crossOrigin = "anonymous";
+//   image.onload = function() {
+//     const canvas = document.createElement('canvas');
+//     canvas.width = 32;
+//     canvas.height = 32;
+//     const context = canvas.getContext('2d');
+//     context.drawImage(image, 0, 0, 32, 32);
+//     const imageData = context.getImageData(0, 0, 32, 32);
+//     callback(imageData.data);
+//   };
+//   image.src = url;
+// }
+// function drawWorld(pixels) {
+//   const centerX = 16;
+//   const centerY = 16;
+//   let radius = 0;
+//   let angle = 0;
+
+//   for (let i = 0; i < 32 * 32; i++) {
+//     const x = Math.floor(centerX + radius * Math.cos(angle));
+//     const y = Math.floor(centerY + radius * Math.sin(angle));
+
+//     const index = (y * 32 + x) * 4;
+//     const r = pixels[index];
+//     const g = pixels[index + 1];
+//     const b = pixels[index + 2];
+
+//     const color = [r / 255, g / 255, b / 255, 1.0];
+//     const block = new Cube();
+//     block.color = color;
+//     block.textureNum = -2; // Use color instead of texture
+//     block.matrix.translate(x - 16, 0, y - 16); // Adjust translation to center the world
+//     block.render();
+
+//     angle += Math.PI / 16;
+//     radius += 0.1;
+//   }
+}
+
 
   // rotation of animal using mouse
   canvas.addEventListener('mousemove', function(event) {
@@ -436,7 +487,7 @@ function main() {
     // renderAllShapes();
     //requestAnimationFrame(tick);
 
-}
+
 
 
 // canvas.addEventListener('keydown', (event) => {
@@ -621,8 +672,8 @@ for (var i = 0; i < 32; i++) {
 var g_eye = [0,0,3];
 var g_at = [0,0,-100];
 var g_up = [0,1,0];
-canvas = document.getElementById('webgl');
-g_camera = new Camera(canvas);
+// canvas = document.getElementById('webgl');
+// g_camera = new Camera(canvas);
 
 var g_map = [
     [1,1,1,1,1,1,1,1],
@@ -634,6 +685,22 @@ var g_map = [
     [1,0,0,0,1,0,0,1],
     [1,0,0,0,0,0,0,1]
 ];
+
+
+function loadImage(url, callback) {
+  const image = new Image();
+  image.crossOrigin = "anonymous";
+  image.onload = function() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 32;
+    canvas.height = 32;
+    const context = canvas.getContext('2d');
+    context.drawImage(image, 0, 0, 32, 32);
+    const imageData = context.getImageData(0, 0, 32, 32);
+    callback(imageData.data);
+  };
+  image.src = url;
+}
 
 function drawMap() {
     for(x=0; x < 32; x++) {
@@ -650,6 +717,173 @@ function drawMap() {
         }
     }
 }
+
+function drawSpiral() {
+  const centerX = 16;
+  const centerY = 16;
+  let radius = 0;
+  let angle = 0;
+
+  // Limit the number of cubes
+  const numCubes = 12;
+  const turns = numCubes; // One cube per turn
+
+  for (let i = 0; i < turns; i++) {
+    const x = Math.floor(centerX + radius * Math.cos(angle));
+    const y = Math.floor(centerY + radius * Math.sin(angle));
+
+    // Ensure x and y are within the bounds of the world
+    if (x >= 0 && x < 32 && y >= 0 && y < 32) {
+      const block = new Cube();
+      block.color = [1, 1, 1, 1]; // Set color to white
+      block.textureNum = -2; // Use color instead of texture
+      block.matrix.translate(x - 16, 0.1, y - 16); // Adjust translation to place the spiral on top of the plane
+      block.matrix.scale(0.1, 0.1, 0.1); // Scale down the size of the cube
+      block.render();
+    }
+
+    angle += 2 * Math.PI; // Increase angle by 2*PI to make one complete turn
+    radius += 1; // Increase radius to spread out the cubes
+  }
+}
+
+
+// function drawSpiral() {
+//   const centerX = 16;
+//   const centerY = 16;
+//   let radius = 0;
+//   let angle = 0;
+
+//   for (let i = 0; i < 32 * 32; i++) {
+//     const x = Math.floor(centerX + radius * Math.cos(angle));
+//     const y = Math.floor(centerY + radius * Math.sin(angle));
+
+//     // Ensure x and y are within the bounds of the world
+//     if (x >= 0 && x < 32 && y >= 0 && y < 32) {
+//       const block = new Cube();
+//       block.color = [1, 1, 1, 1]; // Set color to white
+//       block.textureNum = -2; // Use color instead of texture
+//       block.matrix.translate(x - 16, 0, y - 16); // Adjust translation to center the world
+//       block.render();
+//     }
+
+//     angle += Math.PI / 16;
+//     radius += 0.1;
+//   }
+// }
+
+// function drawWorld(pixels) {
+//   const centerX = 16;
+//   const centerY = 16;
+//   let radius = 0;
+//   let angle = 0;
+
+//   for (let i = 0; i < 32 * 32; i++) {
+//     const x = Math.floor(centerX + radius * Math.cos(angle));
+//     const y = Math.floor(centerY + radius * Math.sin(angle));
+
+//     const index = (y * 32 + x) * 4;
+//     const r = pixels[index];
+//     const g = pixels[index + 1];
+//     const b = pixels[index + 2];
+
+//     const color = [r / 255, g / 255, b / 255, 1.0];
+//     const block = new Cube();
+//     block.color = color;
+//     block.textureNum = -2; // Use color instead of texture
+//     block.matrix.translate(x - 16, 0, y - 16); // Adjust translation to center the world
+//     block.render();
+
+//     angle += Math.PI / 16;
+//     radius += 0.1;
+//   }
+// }
+
+function drawWorld(pixels) {
+  const centerX = 16;
+  const centerY = 16;
+  let radius = 0;
+  let angle = 0;
+
+  for (let i = 0; i < 32 * 32; i++) {
+    const x = Math.floor(centerX + radius * Math.cos(angle));
+    const y = Math.floor(centerY + radius * Math.sin(angle));
+
+    // Ensure x and y are within the bounds of the world
+    if (x >= 0 && x < 32 && y >= 0 && y < 32) {
+      const index = (y * 32 + x) * 4;
+      const r = pixels[index];
+      const g = pixels[index + 1];
+      const b = pixels[index + 2];
+
+      const color = [r / 255, g / 255, b / 255, 1.0];
+      const block = new Cube();
+      block.color = color;
+      block.textureNum = -2; // Use color instead of texture
+      block.matrix.translate(x - 16, 0, y - 16); // Adjust translation to center the world
+      block.render();
+    }
+
+    angle += Math.PI / 16;
+    radius += 0.1;
+  }
+}
+
+
+
+
+// function drawSpiral() {
+//   const a = 0.1;
+//   const b = 0.1;
+//   const numCubes = 100;
+//   const angleStep = 0.2;
+  
+//   for (let i = 0; i < numCubes; i++) {
+//     const theta = i * angleStep;
+//     const r = a + b * theta;
+//     const x = r * Math.cos(theta);
+//     const y = r * Math.sin(theta);
+    
+//     const block = new Cube();
+//     block.color = [Math.random(), Math.random(), Math.random(), 1.0]; // Random colors for variety
+//     block.textureNum = -2; // Use color instead of texture
+//     block.matrix.translate(x, 0, y); // Adjust translation to center the world
+//     block.render();
+//   }
+// }
+
+// function drawSpiral() {
+//   // Define the properties of the spiral
+//   const turns = 5;
+//   const stepsPerTurn = 100;
+//   const height = 0.1;
+//   const radius = 1;
+
+//   // Create an array to hold the vertices of the spiral
+//   const vertices = [];
+
+//   // Calculate the vertices of the spiral
+//   for (let i = 0; i < turns * stepsPerTurn; i++) {
+//       const angle = 2 * Math.PI * i / stepsPerTurn;
+//       const x = radius * Math.cos(angle);
+//       const y = height * i / stepsPerTurn;
+//       const z = radius * Math.sin(angle);
+//       vertices.push(x, y, z);
+//   }
+
+//   // Create a buffer and load the vertices into it
+//   const buffer = gl.createBuffer();
+//   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+//   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+//   // Tell WebGL how to interpret the data in the buffer
+//   gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, 0, 0);
+//   gl.enableVertexAttribArray(a_Position);
+
+//   // Draw the spiral
+//   gl.drawArrays(gl.LINE_STRIP, 0, vertices.length / 3);
+// }
+
 
 
 
@@ -716,13 +950,15 @@ function renderAllShapes() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   drawMap();
+  drawSpiral();
+  //drawSpiral();
   
   // draw the floor 
   var floor = new Cube();
   floor.color = [1.0, 0.0, 0.0, 1.0];
   floor.textureNum = 1;
   floor.matrix.translate(0,-0.75,0.0);
-  floor.matrix.scale(10,0,10);
+  floor.matrix.scale(12,0,12);
   floor.matrix.translate(-0.5,0,-0.5);
   floor.render();
 
