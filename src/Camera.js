@@ -113,6 +113,8 @@
 //         this.updateViewMatrix();
 //     }
 // }
+
+// used ChatGPT for this code too
 class Camera {
     constructor(canvas) {
         if (!canvas) {
