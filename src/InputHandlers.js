@@ -13,11 +13,9 @@ function handleMouseClick(event) {
     if (cubeIndex !== -1) {
       // Remove cube and update Bunnie's Happiness
       cubesData.splice(cubeIndex, 1);
-      if (bunniesHappiness < 20) {
-        bunniesHappiness++;
-      }
+      bunnyHappiness++;
     }
-    document.getElementById('happinessCounter').innerText = bunniesHappiness;
+    document.getElementById('happinessCounter').innerText = bunnyHappiness;
   }
   
   // code given from ChatGPT
@@ -42,6 +40,18 @@ function handleMouseClick(event) {
             break;
         case 'e':
             g_camera.panRight(alpha);
+            break;
+        case 't':
+            g_buildMode = none;
+            break;
+        case 'f':
+            g_buildMode = build;
+            break;
+        case 'v':
+            g_buildMode = destroy;
+            break;
+        case '5':
+            g_blockType = carrotBlock; // texture of carrotBlock which is 4
             break;
     }
   }
@@ -88,3 +98,31 @@ function sendTextToHTML(text, htmlID) {
   
     return([x,y]);
   }
+
+// the following is taken from referencing Bees in Hall of Fame and ChatGPT
+function toGridCoordinates(value) {
+    return Math.floor(value);
+}
+
+// Function to add a block
+function addBlock(atX, closestY, atZ) {
+    if (closestY < g_buildHeight - 1) {
+        g_map[atZ][atX][closestY + 1] = g_blockType;
+        bunnyHappiness++;
+    }
+}
+
+// Function to remove a block
+function removeBlock(atX, closestY, atZ) {
+    if (closestY >= 0) {
+        delete g_map[atZ][atX][closestY];
+        bunnyHappiness++;
+    }
+}
+
+// Function to find the closest block Y-coordinate
+function findClosestBlockY(column, y) {
+    var keys = Object.keys(column).map(key => parseInt(key)).sort((a, b) => a - b);
+    var closestY = keys.find(key => key <= y);
+    return closestY !== undefined ? closestY : -1;
+}

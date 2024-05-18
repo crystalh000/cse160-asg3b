@@ -100,17 +100,6 @@ var g_up = [0,1,0];
 //canvas = document.getElementById('webgl');
 // g_camera = new Camera(canvas);
 
-var g_map = [
-    [1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,1],
-    [1,0,0,1,1,0,0,1],
-    [1,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,1],
-    [1,0,0,0,1,0,0,1],
-    [1,0,0,0,0,0,0,1]
-];
-
 
 function main() {
   // Set up canvas and get gl variables
@@ -138,6 +127,9 @@ function main() {
   document.onkeydown = handleKeyDown;
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  
+  generateRandomCubes();
+  initializeCubes();
 
   // Set up actions for the HTML UI Elements
   addActionsForHTMLUI();

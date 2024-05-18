@@ -40,6 +40,16 @@ function initTextures(gl,n) {
     image3.onload = function(){ sendImageToTEXTURE3(image3); };
     image3.src = "../lib/cottage_wall.jpg";
 
+    var image4 = new Image();
+    if (!image4) {
+      console.log('Failed to create the image object 4');
+      return false;
+    }
+
+    // Register the event handler to be called on loading an image
+    image4.onload = function(){ sendImageToTEXTURE4(image4); };
+    image4.src = "../lib/carrot.jpeg";
+
     return true;
 }
 
@@ -108,3 +118,20 @@ function sendImageToTEXTURE3(image) {
   gl.uniform1i(u_Sampler3, 3);
   console.log('finished loadTexture3');
 }
+
+
+function sendImageToTEXTURE4(image) {
+    var texture = gl.createTexture();   // Create a texture object
+    if (!texture) {
+      console.log('Failed to create the texture object');
+      return false;
+    }
+  
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+    gl.activeTexture(gl.TEXTURE4);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+    gl.uniform1i(u_Sampler4, 4);
+    console.log('finished loadTexture4');
+  }

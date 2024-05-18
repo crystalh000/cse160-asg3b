@@ -1,3 +1,15 @@
+g_map = [
+    [1,1,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,1],
+    [1,0,0,1,1,0,0,1],
+    [1,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,1],
+    [1,0,0,0,1,0,0,1],
+    [1,0,0,0,0,0,0,1]
+];
+
+
 function renderAllShapes() {
     var startTime = performance.now();
   
@@ -14,6 +26,9 @@ function renderAllShapes() {
     
   
     drawMap();
+    // drawCubes();
+    // generateRandomCubes();
+    // initializeCubes();
     drawCubes();
     
     // draw the floor 
@@ -177,92 +192,151 @@ function renderAllShapes() {
   }
 
 
-function drawCubes() {
-    for (const cube of cubesData) {
-      const block = new Cube();
-      block.color = cube.color;
-      block.textureNum = -2;
-      block.matrix.translate(cube.x - 16, 0.1, cube.y - 16);
-      block.matrix.scale(0.1, 0.1, 0.1);
-      block.render();
+// function drawCubes() {
+//     for (const cube of cubesData) {
+//       const block = new Cube();
+//       block.color = cube.color;
+//       block.textureNum = -2;
+//       block.matrix.translate(cube.x - 16, 0.1, cube.y - 16);
+//       block.matrix.scale(0.1, 0.1, 0.1);
+//       block.render();
+//     }
+// }
+
+
+// function drawWorld(pixels) {
+//     const centerX = 16;
+//     const centerY = 16;
+//     let radius = 0;
+//     let angle = 0;
+  
+//     for (let i = 0; i < 32 * 32; i++) {
+//       const x = Math.floor(centerX + radius * Math.cos(angle));
+//       const y = Math.floor(centerY + radius * Math.sin(angle));
+  
+//       // Ensure x and y are within the bounds of the world
+//       if (x >= 0 && x < 32 && y >= 0 && y < 32) {
+//         const index = (y * 32 + x) * 4;
+//         const r = pixels[index];
+//         const g = pixels[index + 1];
+//         const b = pixels[index + 2];
+  
+//         const color = [r / 255, g / 255, b / 255, 1.0];
+//         const block = new Cube();
+//         block.color = color;
+//         block.textureNum = -2; // Use color instead of texture
+//         block.matrix.translate(x - 16, 0, y - 16); // Adjust translation to center the world
+//         block.render();
+//       }
+  
+//       angle += Math.PI / 16;
+//       radius += 0.1;
+//     }
+//   }
+
+
+// function drawBees() {
+//     cubesData.forEach(cube => {
+//       const block = new Cube();
+//       block.color = cube.color; // Set color to the stored value
+//       block.textureNum = -2; // Use color instead of texture
+//       block.matrix.translate(cube.x - 16, 0.1, cube.y - 16); // Adjust translation to place the cubes on top of the plane
+//       block.matrix.scale(0.1, 0.1, 0.1); // Scale down the size of the cube
+//       block.render();
+//     });
+//   }
+
+//   function generateRandomCubes() {
+//     cubesData = [];
+//     const worldSize = 16;
+//     for (let i = 0; i < numCubes; i++) {
+//       const x = Math.floor(Math.random() * worldSize);
+//       const y = Math.floor(Math.random() * worldSize);
+//       cubesData.push({ x: x, y: y, color: [1, 1, 1, 1] });
+//     }
+//   }
+
+// function initializeCubes() {
+//     for (let i = 0; i < numCubes; i++) {
+//       const x = Math.floor(Math.random() * worldSize);
+//       const y = Math.floor(Math.random() * worldSize);
+//       const color = [Math.random(), Math.random(), Math.random(), 1]; // Random color for each cube
+  
+//       // Store cube data
+//       cubesData.push({ x, y, color });
+//     }
+//   }
+
+// taken from Microsoft Copilot
+function generateRandomCubes() {
+    cubesData = [];
+    for (let i = 0; i < numCubes; i++) {
+        const x = Math.floor(Math.random() * worldSize);
+        const y = Math.floor(Math.random() * worldSize);
+        cubesData.push({ x: x, y: y, color: [1, 1, 1, 1] });
     }
 }
 
-
-function drawWorld(pixels) {
-    const centerX = 16;
-    const centerY = 16;
-    let radius = 0;
-    let angle = 0;
-  
-    for (let i = 0; i < 32 * 32; i++) {
-      const x = Math.floor(centerX + radius * Math.cos(angle));
-      const y = Math.floor(centerY + radius * Math.sin(angle));
-  
-      // Ensure x and y are within the bounds of the world
-      if (x >= 0 && x < 32 && y >= 0 && y < 32) {
-        const index = (y * 32 + x) * 4;
-        const r = pixels[index];
-        const g = pixels[index + 1];
-        const b = pixels[index + 2];
-  
-        const color = [r / 255, g / 255, b / 255, 1.0];
-        const block = new Cube();
-        block.color = color;
-        block.textureNum = -2; // Use color instead of texture
-        block.matrix.translate(x - 16, 0, y - 16); // Adjust translation to center the world
-        block.render();
-      }
-  
-      angle += Math.PI / 16;
-      radius += 0.1;
-    }
-  }
-
-
-function drawBees() {
-    cubesData.forEach(cube => {
-      const block = new Cube();
-      block.color = cube.color; // Set color to the stored value
-      block.textureNum = -2; // Use color instead of texture
-      block.matrix.translate(cube.x - 16, 0.1, cube.y - 16); // Adjust translation to place the cubes on top of the plane
-      block.matrix.scale(0.1, 0.1, 0.1); // Scale down the size of the cube
-      block.render();
-    });
-  }
-
-  function generateRandomCubes() {
-    cubesData = [];
-    const worldSize = 16;
-    for (let i = 0; i < numCubes; i++) {
-      const x = Math.floor(Math.random() * worldSize);
-      const y = Math.floor(Math.random() * worldSize);
-      cubesData.push({ x: x, y: y, color: [1, 1, 1, 1] });
-    }
-  }
-  
 function initializeCubes() {
+    cubesData = [];
     for (let i = 0; i < numCubes; i++) {
-      const x = Math.floor(Math.random() * worldSize);
-      const y = Math.floor(Math.random() * worldSize);
-      const color = [Math.random(), Math.random(), Math.random(), 1]; // Random color for each cube
-  
-      // Store cube data
-      cubesData.push({ x, y, color });
-    }
-  }
+        const x = Math.floor(Math.random() * worldSize);
+        const y = Math.floor(Math.random() * worldSize);
+        const color = [Math.random(), Math.random(), Math.random(), 1]; // Random color for each cube
 
-  function drawMap() {
+        // Store cube data
+        cubesData.push({ x, y, color });
+    }
+}
+
+// function drawCubes() {
+//     for (const cube of cubesData) {
+//         const block = new Cube();
+//         block.color = cube.color;
+//         block.textureNum = -2;
+//         block.matrix.translate(cube.x - 16, 0.1, cube.y - 16);
+//         block.matrix.scale(0.1, 0.1, 0.1);
+//         block.render();
+//     }
+// }
+
+function drawCubes() {
+    const block = new Cube();  // Create a single Cube object
+    for (const cube of cubesData) {
+        block.color = cube.color;
+        block.textureNum = -2;
+        block.matrix.setTranslate(cube.x - 16, 0.1, cube.y - 16);
+        block.matrix.scale(0.1, 0.1, 0.1);
+        block.render();
+    }
+}
+
+// function drawMap() {
+//     for(x=0; x < 32; x++) {
+//         for (y=0; y < 32; y++) {
+//             if (x == 1 || x == 31 || y == 0 || y == 31) {
+//                 var body = new Cube();
+//                 body.textureNum = 3;
+//                 // body.color = [0.8, 1.0, 1.0, 1.0];
+//                 body.matrix.translate(0,-0.75,0);
+//                 body.matrix.scale(0.4,0.4,0.4);
+//                 body.matrix.translate(x-16,0,y-16);
+//                 body.renderfast();
+//             }
+//         }
+//     }
+// }
+
+
+function drawMap() {
+    const block = new Cube();  // Create a single Cube object
     for(x=0; x < 32; x++) {
         for (y=0; y < 32; y++) {
             if (x == 1 || x == 31 || y == 0 || y == 31) {
-                var body = new Cube();
-                body.textureNum = 3;
-                // body.color = [0.8, 1.0, 1.0, 1.0];
-                body.matrix.translate(0,-0.75,0);
-                body.matrix.scale(0.4,0.4,0.4);
-                body.matrix.translate(x-16,0,y-16);
-                body.renderfast();
+                block.textureNum = 3;
+                block.matrix.setTranslate(x-16,0,y-16);
+                block.matrix.scale(0.4,0.4,0.4);
+                block.renderfast();
             }
         }
     }

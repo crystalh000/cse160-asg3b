@@ -25,6 +25,7 @@ var FSHADER_SOURCE =`
   uniform sampler2D u_Sampler1;
   uniform sampler2D u_Sampler2;
   uniform sampler2D u_Sampler3;
+  uniform sampler2D u_Sampler4;
   uniform int u_whichTexture;
   void main() {
     if (u_whichTexture == -2) {
@@ -39,6 +40,8 @@ var FSHADER_SOURCE =`
         gl_FragColor = texture2D(u_Sampler2, v_UV); // use texture2 for sky
     } else if (u_whichTexture == 3) {
       gl_FragColor = texture2D(u_Sampler3, v_UV); // use texture3 for wall
+  } else if (u_whichTexture == 4) {
+        gl_FragColor = texture2D(u_Sampler4, v_UV); // use texture4 for ground
   }
     else {
         gl_FragColor = vec4(1,0.2,0.2,1); // error, put reddish
