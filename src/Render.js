@@ -26,28 +26,42 @@ function makeMap(map, mapSize) {
 
 function clearMap() {
     g_map = [];
-    createMap(g_map, 64);  // 32 x 32 matrix filled with empty dictionaries {} used to store 3rd dimension
+    makeMap(g_map, 64);  // 32 x 32 matrix filled with empty dictionaries {} used to store 3rd dimension
     var block = new Cube();
-    for (var z = 0; z < 32; z++) {
-        for (var x = 0; x < 32; x++) {
-            for (var y = g_map[z][x]) {
-                if (g_map[z])
-            }
-        }
-    }
+    
 }
 
 function initMap() {
     clearMap();
+    addBees(1,1); // testing
+    addWalls();
 }
 
+// code below from Microsoft Copilot
 function drawMap() {
-    // g_mapInitialized important so you don't redraw over stuff
     if (!g_mapInitialized) {
-        initMap();
-        g_mapInitialized = true;
+      initMap();
+      g_mapInitialized = true;
     }
-}
+  
+    var block = new Cube();
+  
+    for (var z = 0; z < 32; z++) {
+      for (var x = 0; x < 32; x++) {
+        for (var y in g_map[z][x]) {
+          if (g_map[z][x].hasOwnProperty(y)){
+            block.textureNum = g_map[z][x][y];
+  
+            block.matrix.setIdentity();
+            block.matrix.translate(0, -0.75, 0);
+            block.matrix.scale(0.5, 0.5, 0.5);
+            block.matrix.translate(x - 16, y, z - 16);
+            block.render();
+          }
+        }
+      }
+    }
+  }
 
 function renderAllShapes() {
     var startTime = performance.now();
@@ -68,7 +82,7 @@ function renderAllShapes() {
     // drawCubes();
     // generateRandomCubes();
     // initializeCubes();
-    drawCubes();
+    //drawCubes();
     
     // draw the floor 
     var floor = new Cube();
@@ -274,16 +288,20 @@ function renderAllShapes() {
 //   }
 
 
-// function drawBees() {
-//     cubesData.forEach(cube => {
-//       const block = new Cube();
-//       block.color = cube.color; // Set color to the stored value
-//       block.textureNum = -2; // Use color instead of texture
-//       block.matrix.translate(cube.x - 16, 0.1, cube.y - 16); // Adjust translation to place the cubes on top of the plane
-//       block.matrix.scale(0.1, 0.1, 0.1); // Scale down the size of the cube
-//       block.render();
-//     });
-//   }
+function addBees(x,z) {
+    g_map[z][x][0] = carrotBlock; // just for testing
+}
+
+
+function addWalls() {
+    for(let x = 0; x < 32; x++) {
+        for (let y = 0; y < 32; y++) {
+            if (x == 1 || x == 31 || y == 0 || y == 31) {
+                g_map[y][x][0] = 3; // set the texture number to 3 for the walls
+            }
+        }
+    }
+}
 
 //   function generateRandomCubes() {
 //     cubesData = [];
@@ -366,21 +384,7 @@ function drawCubes() {
     }
 }
 
-function drawMap() {
-    for(x=0; x < 32; x++) {
-        for (y=0; y < 32; y++) {
-            if (x == 1 || x == 31 || y == 0 || y == 31) {
-                var body = new Cube();
-                body.textureNum = 3;
-                // body.color = [0.8, 1.0, 1.0, 1.0];
-                body.matrix.translate(0,-0.75,0);
-                body.matrix.scale(0.4,0.4,0.4);
-                body.matrix.translate(x-16,0,y-16);
-                body.renderfast();
-            }
-        }
-    }
-}
+
 
 // function drawMap() {
 //     const block = new Cube();  // Create a single Cube object
