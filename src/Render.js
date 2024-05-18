@@ -1,14 +1,19 @@
-g_map = [
-    [1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,1],
-    [1,0,0,1,1,0,0,1],
-    [1,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,1],
-    [1,0,0,0,1,0,0,1],
-    [1,0,0,0,0,0,0,1]
-];
+// g_map = [
+//     [1,1,1,1,1,1,1,1],
+//     [1,0,0,0,0,0,0,1],
+//     [1,0,0,0,0,0,0,1],
+//     [1,0,0,1,1,0,0,1],
+//     [1,0,0,0,0,0,0,1],
+//     [1,0,0,0,0,0,0,1],
+//     [1,0,0,0,1,0,0,1],
+//     [1,0,0,0,0,0,0,1]
+// ];
 
+// g_map = new Array(worldSize).fill(null).map(() => new Array(worldSize).fill(0));
+
+g_map = new Array(worldSize).fill(null).map(() => 
+  new Array(worldSize).fill(null).map(() => new Array(g_buildHeight).fill(0)) // Fill with 0s for empty cells
+);
 
 function renderAllShapes() {
     var startTime = performance.now();
@@ -311,33 +316,88 @@ function drawCubes() {
     }
 }
 
+function drawMap() {
+    for(x=0; x < 32; x++) {
+        for (y=0; y < 32; y++) {
+            if (x == 1 || x == 31 || y == 0 || y == 31) {
+                var body = new Cube();
+                body.textureNum = 3;
+                // body.color = [0.8, 1.0, 1.0, 1.0];
+                body.matrix.translate(0,-0.75,0);
+                body.matrix.scale(0.4,0.4,0.4);
+                body.matrix.translate(x-16,0,y-16);
+                body.renderfast();
+            }
+        }
+    }
+}
+
 // function drawMap() {
+//     const block = new Cube();  // Create a single Cube object
+  
+//     for (let x = 0; x < worldSize; x++) {
+//       for (let y = 0; y < worldSize; y++) {
+//         for (let z = 0; z < g_buildHeight; z++) {
+//           const blockType = g_map[x][y][z];
+  
+//           if (blockType !== 0) {
+//             // Set texture based on blockType (assuming getTextureForBlockType works)
+//             block.textureNum = getTextureForBlockType(blockType);
+  
+//             // Adjust translation for z-axis (modify based on your drawing logic)
+//             block.matrix.setTranslate(x - 16, z * 0.4, y - 16); // Assuming 0.4 is the scale for each block unit
+//             block.matrix.scale(0.4, 0.4, 0.4);
+  
+//             block.renderfast();
+//           }
+//         }
+//       }
+//     }
+//   }
+
+  function getTextureForBlockType(blockType) {
+    switch (blockType) {
+      case 0: // Empty cell
+        return 0; // Assuming texture ID 0 represents an empty texture
+      case 1: // Grass block
+        return 1; // Assuming texture ID 1 represents a grass texture
+      case 2: // Dirt block
+        return 2; // Assuming texture ID 2 represents a dirt texture
+      case 3: // Carrot block
+        return 3; // Assuming texture ID 3 represents a carrot texture
+      case 4:
+        return
+        default:
+        console.warn("Unknown block type:", blockType);
+        return 0; // Or return a default texture ID for unknown types
+    }
+  }
+
+
+// function drawMap() {
+//     const block = new Cube();  // Create a single Cube object
 //     for(x=0; x < 32; x++) {
 //         for (y=0; y < 32; y++) {
 //             if (x == 1 || x == 31 || y == 0 || y == 31) {
-//                 var body = new Cube();
-//                 body.textureNum = 3;
-//                 // body.color = [0.8, 1.0, 1.0, 1.0];
-//                 body.matrix.translate(0,-0.75,0);
-//                 body.matrix.scale(0.4,0.4,0.4);
-//                 body.matrix.translate(x-16,0,y-16);
-//                 body.renderfast();
+//                 block.textureNum = 3;
+//                 block.matrix.setTranslate(x-16,0,y-16);
+//                 block.matrix.scale(0.4,0.4,0.4);
+//                 block.renderfast();
 //             }
 //         }
 //     }
 // }
 
-
-function drawMap() {
-    const block = new Cube();  // Create a single Cube object
-    for(x=0; x < 32; x++) {
-        for (y=0; y < 32; y++) {
-            if (x == 1 || x == 31 || y == 0 || y == 31) {
-                block.textureNum = 3;
-                block.matrix.setTranslate(x-16,0,y-16);
-                block.matrix.scale(0.4,0.4,0.4);
-                block.renderfast();
-            }
-        }
-    }
-}
+// function drawMap() {
+//     const block = new Cube();  // Create a single Cube object
+//     for(x=0; x < 32; x++) {
+//         for (y=0; y < 32; y++) {
+//             if (x == 1 || x == 31 || y == 0 || y == 31) {
+//                 block.textureNum = 3;
+//                 block.matrix.setTranslate(x-16,0,y-16);
+//                 block.matrix.scale(0.4,0.4,0.4);
+//                 block.renderfast();
+//             }
+//         }
+//     }
+// }

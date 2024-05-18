@@ -15,6 +15,7 @@ let u_Sampler0;
 let u_Sampler1;
 let u_Sampler2;
 let u_Sampler3;
+let u_Sampler4;
 
 
 let g_yellowAngle = 0;
@@ -56,5 +57,5 @@ var g_buildMode = none;
 var carrotBlock = 4;
 var g_blockType = carrotBlock;
 var g_selected = null;
-var g_buildHeight = 45;
+var g_buildHeight = 10;
 let g_map;

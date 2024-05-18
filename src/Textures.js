@@ -48,7 +48,7 @@ function initTextures(gl,n) {
 
     // Register the event handler to be called on loading an image
     image4.onload = function(){ sendImageToTEXTURE4(image4); };
-    image4.src = "../lib/carrot.jpeg";
+    image4.src = "../lib/carrot.jpg";
 
     return true;
 }

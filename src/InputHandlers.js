@@ -1,22 +1,96 @@
+// function handleMouseClick(event) {
+//     const rect = canvas.getBoundingClientRect();
+//     const x = event.clientX - rect.left;
+//     const y = event.clientY - rect.top;
+  
+//     // Convert click coordinates to world coordinates
+//     const worldX = Math.floor((x / canvas.width) * worldSize);
+//     const worldY = Math.floor((y / canvas.height) * worldSize);
+  
+//     // Check if a cube exists at the clicked position
+//     const cubeIndex = cubesData.findIndex(cube => cube.x === worldX && cube.y === worldY);
+  
+//     if (cubeIndex !== -1) {
+//       // Remove cube and update Bunnie's Happiness
+//       cubesData.splice(cubeIndex, 1);
+//       bunnyHappiness++;
+//     }
+//     document.getElementById('happinessCounter').innerText = bunnyHappiness;
+//   }
+
+// function handleMouseClick(event) {
+//     const rect = canvas.getBoundingClientRect();
+//     const x = event.clientX - rect.left;
+//     const y = event.clientY - rect.top;
+  
+//     // Convert click coordinates to world coordinates
+//     const worldX = Math.floor((x / canvas.width) * worldSize);
+//     const worldY = Math.floor((y / canvas.height) * worldSize);
+  
+//     // Check if a cube exists at the clicked position
+//     const cubeIndex = cubesData.findIndex(cube => cube.x === worldX && cube.y === worldY);
+  
+//     if (cubeIndex !== -1) {
+//       // Remove cube and update Bunnie's Happiness
+//       cubesData.splice(cubeIndex, 1);
+//       bunnyHappiness++;
+//     } else {
+//       // Add a new cube at the clicked position
+//       cubesData.push({ x: worldX, y: worldY, color: g_blockType });
+//       bunnyHappiness++;
+//     }
+//     document.getElementById('happinessCounter').innerText = bunnyHappiness;
+// }
+
+// code gotten from Gemini
+// function handleMouseClick(event) {
+//     const rect = canvas.getBoundingClientRect();
+//     const x = event.clientX - rect.left;
+//     const y = event.clientY - rect.top;
+  
+//     // Convert click coordinates to world coordinates
+//     const worldX = toGridCoordinates((x / canvas.width) * worldSize);
+//     const worldY = toGridCoordinates((y / canvas.height) * worldSize);
+  
+//     // Find the closest block Y-coordinate
+//     const closestY = findClosestBlockY(g_map[worldX], worldY);
+  
+//     if (g_buildMode === "build") {
+//       addBlock(worldX, closestY, 0); // Assuming z-axis is 0 for the ground
+//     } else if (g_buildMode === "destroy") {
+//       removeBlock(worldX, closestY, 0);
+//     }
+  
+//     document.getElementById('happinessCounter').innerText = bunnyHappiness;
+//   }
 function handleMouseClick(event) {
+    console.log("mouse click");
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
   
     // Convert click coordinates to world coordinates
-    const worldX = Math.floor((x / canvas.width) * worldSize);
-    const worldY = Math.floor((y / canvas.height) * worldSize);
+    const worldX = toGridCoordinates((x / canvas.width) * worldSize);
+    const worldY = toGridCoordinates((y / canvas.height) * worldSize);
   
-    // Check if a cube exists at the clicked position
-    const cubeIndex = cubesData.findIndex(cube => cube.x === worldX && cube.y === worldY);
+    // Check if worldX and worldY are within the bounds of the g_map array
+    if (worldX >= 0 && worldX < g_map.length && worldY >= 0 && worldY < g_map[worldX].length) {
+        // Find the closest block Y-coordinate
+        const closestY = findClosestBlockY(g_map[worldX][worldY], worldY);
   
-    if (cubeIndex !== -1) {
-      // Remove cube and update Bunnie's Happiness
-      cubesData.splice(cubeIndex, 1);
-      bunnyHappiness++;
+        if (g_buildMode === build) {
+            console.log("attempting to build block");
+          addBlock(worldX, closestY, 0); // Assuming z-axis is 0 for the ground
+        } else if (g_buildMode === destroy) {
+          removeBlock(worldX, closestY, 0);
+          console.log("attempting to destroy block");
+        }
     }
+  
     document.getElementById('happinessCounter').innerText = bunnyHappiness;
-  }
+}
+
+
   
   // code given from ChatGPT
   function handleKeyDown(event) {
@@ -46,9 +120,11 @@ function handleMouseClick(event) {
             break;
         case 'f':
             g_buildMode = build;
+            console.log("build mode activated through f");
             break;
         case 'v':
             g_buildMode = destroy;
+            console.log("build mode activated through v");
             break;
         case '5':
             g_blockType = carrotBlock; // texture of carrotBlock which is 4
@@ -110,6 +186,7 @@ function addBlock(atX, closestY, atZ) {
         g_map[atZ][atX][closestY + 1] = g_blockType;
         bunnyHappiness++;
     }
+    console.log("adding block");
 }
 
 // Function to remove a block
