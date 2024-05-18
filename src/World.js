@@ -270,27 +270,6 @@ function connectVariablesToGLSL() {
 }
 
 
-function main() {
-  // Set up canvas and get gl variables
-  setUpWebGL();
-  //canvas = document.getElementById('webgl');
-  g_camera = new Camera(canvas); // recommended from ChatGPT
-  document.addEventListener('keydown', handleKeyDown);
-  canvas.addEventListener('click', handleMouseClick);
-
-  tick();
-  // Set up GLSL shader programs and connect JS variables to GLSL
-  connectVariablesToGLSL();
-
-  // Set up actions for the HTML UI Elements
-  addActionsForHTMLUI();
-
-  // // for keyboard input
-  // document.onkeydown = keydown;
-
-  initTextures();
-
-}
 
 
 // Set up actions for the HTML UI elements
@@ -431,30 +410,30 @@ function tick() {
 
 
 
-  // rotation of animal using mouse
-  canvas.addEventListener('mousemove', function(event) {
-    var rect = canvas.getBoundingClientRect();
-    var x = event.clientX - rect.left;
-    var y = event.clientY - rect.top;
+  // // rotation of animal using mouse
+  // canvas.addEventListener('mousemove', function(event) {
+  //   var rect = canvas.getBoundingClientRect();
+  //   var x = event.clientX - rect.left;
+  //   var y = event.clientY - rect.top;
 
-    // Map the x and y positions to rotation angles
-    g_globalAngle = (x / canvas.width) * 360; // Map x from [0, width] to [0, 360]
+  //   // Map the x and y positions to rotation angles
+  //   g_globalAngle = (x / canvas.width) * 360; // Map x from [0, width] to [0, 360]
 
-    // Redraw the scene
-    renderAllShapes();
-  });
+  //   // Redraw the scene
+  //   renderAllShapes();
+  // });
 
-  canvas.addEventListener('mousedown', function(event) {
-    if(event.shiftKey) {
-        // The shift key was held down during the click
-        // Start the 'poke' animation
-        g_pokeAnimation = true;
-        //console.log("Poke animation started");
-    }
-  });
+  // canvas.addEventListener('mousedown', function(event) {
+  //   if(event.shiftKey) {
+  //       // The shift key was held down during the click
+  //       // Start the 'poke' animation
+  //       g_pokeAnimation = true;
+  //       //console.log("Poke animation started");
+  //   }
+  // });
     // Specify the color for clearing <canvas>
     // gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clearColor(30/255, 130/255, 76/255, 1.0); // make background green
+    //gl.clearColor(30/255, 130/255, 76/255, 1.0); // make background green
 
     // Clear <canvas>
     // gl.clear(gl.COLOR_BUFFER_BIT);
@@ -476,39 +455,39 @@ function tick() {
 
 var g_shapesList = [];
 
-function click(ev) {
-  // Extract the event click and return it in WebGL
-  let [x,y] = convertCoordinatesEventToGL(ev);
+// function click(ev) {
+//   // Extract the event click and return it in WebGL
+//   let [x,y] = convertCoordinatesEventToGL(ev);
 
-  // Create and store a new point object
-  let point;
-  if (g_selectedType == POINT) {
-    point = new Point();
-  } else if (g_selectedType == TRIANGLE) {
-    point = new Triangle();
-  } else if (g_selectedType == CIRCLE){
-    point = new Circle();
-    point.segments = g_selectedSegments;
-  } else if (g_selectedType == PICTURE){
-    point = new Picture();
+//   // Create and store a new point object
+//   let point;
+//   if (g_selectedType == POINT) {
+//     point = new Point();
+//   } else if (g_selectedType == TRIANGLE) {
+//     point = new Triangle();
+//   } else if (g_selectedType == CIRCLE){
+//     point = new Circle();
+//     point.segments = g_selectedSegments;
+//   } else if (g_selectedType == PICTURE){
+//     point = new Picture();
 
-  }
-  point.position = [x,y];
-  point.color = g_selectedColor.slice();
-  point.size = g_selectedSize;
-  g_shapesList.push(point);
+//   }
+//   point.position = [x,y];
+//   point.color = g_selectedColor.slice();
+//   point.size = g_selectedSize;
+//   g_shapesList.push(point);
   
 
-  // // Store the coordinates to g_points array
-  // g_points.push([x, y]);
+//   // // Store the coordinates to g_points array
+//   // g_points.push([x, y]);
 
-  // g_colors.push(g_selectedColor.slice()); // forces a copy of all the elements in the array
+//   // g_colors.push(g_selectedColor.slice()); // forces a copy of all the elements in the array
 
-  // Draw every shape that is supposed to be in the canvas
-  renderAllShapes();
+//   // Draw every shape that is supposed to be in the canvas
+//   renderAllShapes();
 
  
-}
+// }
 
 function convertCoordinatesEventToGL(ev) {
   var x = ev.clientX; // x coordinate of a mouse pointer
@@ -905,4 +884,63 @@ function sendTextToHTML(text, htmlID) {
     return;
   }
   htmlElm.innerHTML = text;
+}
+
+
+function main() {
+  // Set up canvas and get gl variables
+  setUpWebGL();
+  g_camera = new Camera(canvas); // recommended from ChatGPT
+  connectVariablesToGLSL();
+  //canvas = document.getElementById('webgl');
+  canvas = document.getElementById('webgl');
+  if (canvas) {
+    canvas.addEventListener('click', handleMouseClick);
+    // canvas.addEventListener('mousemove', function(event) {
+    //   var rect = canvas.getBoundingClientRect();
+    //   var x = event.clientX - rect.left;
+    //   var y = event.clientY - rect.top;
+  
+    //   // Map the x and y positions to rotation angles
+    //   g_globalAngle = (x / canvas.width) * 360; // Map x from [0, width] to [0, 360]
+  
+    //   // Redraw the scene
+    //   renderAllShapes();
+    // });
+
+    canvas.addEventListener('mousedown', function(event) {
+      if(event.shiftKey) {
+          // The shift key was held down during the click
+          // Start the 'poke' animation
+          g_pokeAnimation = true;
+          //console.log("Poke animation started");
+      }
+    });
+  } else {
+    console.error('Cannot find canvas element');
+  }
+  //canvas.addEventListener('click', handleMouseClick);
+  //document.addEventListener('keydown', handleKeyDown);
+
+  document.onkeydown = handleKeyDown;
+
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+  // Set up actions for the HTML UI Elements
+  addActionsForHTMLUI();
+  initTextures();
+  // // for keyboard input
+  // document.onkeydown = keydown;
+
+
+  var tick = function() {
+    updateAnimationAngles();
+    renderAllShapes();
+    requestAnimationFrame(tick);
+  }
+
+  tick();
+  // Set up GLSL shader programs and connect JS variables to GLSL
+  
+
 }
