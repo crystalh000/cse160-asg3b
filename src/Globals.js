@@ -50,12 +50,14 @@ let bunnyHappiness = 0;
 // from ChatGPT to help with adding and removing blocks
 // referenced Bees in Hall of Fame as well
 
-var build = 1;
-var destroy = 2;
+var BUILD_MODE = 1;
+var DESTROY_MODE = 2;
+let g_buildMode = null;
 var none = 0;
-var g_buildMode = none;
 var carrotBlock = 4;
 var g_blockType = carrotBlock;
+
 var g_selected = null;
 var g_buildHeight = 10;
 let g_map;
+let g_mapInitialized = false;

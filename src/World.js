@@ -122,9 +122,7 @@ function main() {
     console.error('Cannot find canvas element');
   }
   //canvas.addEventListener('click', handleMouseClick);
-  //document.addEventListener('keydown', handleKeyDown);
-
-  document.onkeydown = handleKeyDown;
+  document.addEventListener('keydown', handleKeyDown);
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   

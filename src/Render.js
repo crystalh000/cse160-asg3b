@@ -11,9 +11,43 @@
 
 // g_map = new Array(worldSize).fill(null).map(() => new Array(worldSize).fill(0));
 
-g_map = new Array(worldSize).fill(null).map(() => 
-  new Array(worldSize).fill(null).map(() => new Array(g_buildHeight).fill(0)) // Fill with 0s for empty cells
-);
+g_map = [];
+
+// following functions from a friend who helped walk me through a more efficient way of using the map
+// so i can add and delete blocks because what i was doing for wasn't working..
+function makeMap(map, mapSize) {
+    for (r = 0; r < mapSize; r++) {
+      map.push([]);       
+      for (c = 0; c < mapSize; c++) {
+        map[r].push({});   
+      }
+    }
+}
+
+function clearMap() {
+    g_map = [];
+    createMap(g_map, 64);  // 32 x 32 matrix filled with empty dictionaries {} used to store 3rd dimension
+    var block = new Cube();
+    for (var z = 0; z < 32; z++) {
+        for (var x = 0; x < 32; x++) {
+            for (var y = g_map[z][x]) {
+                if (g_map[z])
+            }
+        }
+    }
+}
+
+function initMap() {
+    clearMap();
+}
+
+function drawMap() {
+    // g_mapInitialized important so you don't redraw over stuff
+    if (!g_mapInitialized) {
+        initMap();
+        g_mapInitialized = true;
+    }
+}
 
 function renderAllShapes() {
     var startTime = performance.now();
@@ -305,14 +339,30 @@ function initializeCubes() {
 //     }
 // }
 
+// function drawCubes() {
+//     const block = new Cube();  // Create a single Cube object
+//     for (const cube of cubesData) {
+//         block.color = cube.color;
+//         block.textureNum = -2;
+//         block.matrix.setTranslate(cube.x - 16, 0.1, cube.y - 16);
+//         block.matrix.scale(0.1, 0.1, 0.1);
+//         block.render();
+//     }
+// }
+
 function drawCubes() {
     const block = new Cube();  // Create a single Cube object
-    for (const cube of cubesData) {
-        block.color = cube.color;
-        block.textureNum = -2;
-        block.matrix.setTranslate(cube.x - 16, 0.1, cube.y - 16);
-        block.matrix.scale(0.1, 0.1, 0.1);
-        block.render();
+    for (let x = 0; x < worldSize; x++) {
+        for (let y = 0; y < worldSize; y++) {
+            for (let z = 0; z < g_buildHeight; z++) {
+                if (g_map[x][y][z] !== 0) {
+                    block.textureNum = getTextureForBlockType(g_map[x][y][z]);
+                    block.matrix.setTranslate(x - 16, z * 0.1, y - 16);
+                    block.matrix.scale(0.1, 0.1, 0.1);
+                    block.render();
+                }
+            }
+        }
     }
 }
 
