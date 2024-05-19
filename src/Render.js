@@ -297,7 +297,7 @@ function addWalls() {
     for(let x = 0; x < 32; x++) {
         for (let y = 0; y < 32; y++) {
             if (x == 1 || x == 31 || y == 0 || y == 31) {
-                g_map[y][x][0] = 3; // set the texture number to 3 for the walls
+                g_map[x][y][0] = 3; // set the texture number to 3 for the walls
             }
         }
     }

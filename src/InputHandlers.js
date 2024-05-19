@@ -17,13 +17,13 @@ function handleMouseClick(event) {
     //     const closestY = findClosestY(g_map[worldX][worldY], 0); // Assuming 0 for the ground level
     //     console.log(`Closest block Y-coordinate: ${closestY}`);
 
-    //     if (g_buildMode === BUILD_MODE) {
-    //         console.log("attempting to build block");
-    //         addBlock(worldX, closestY + 1, worldY); // Assuming z-axis is worldY
-    //     } else if (g_buildMode === DESTROY_MODE) {
-    //         console.log("attempting to destroy block");
-    //         removeBlock(worldX, closestY, worldY);
-    //     }
+        if (g_buildMode === BUILD_MODE) {
+            console.log("attempting to build block");
+            addBlock(); // Assuming z-axis is worldY
+        } else if (g_buildMode === DESTROY_MODE) {
+            console.log("attempting to destroy block");
+            removeBlock();
+        }
     // }
 
     
@@ -134,7 +134,7 @@ function toGridCoordinates(value) { // add depth and exponential scaling
     //   }
 }
 
-function addBlock(atX, closestY, atZ) {
+function addBlock() {
     
     // if (closestY < g_buildHeight - 1) {
     //     g_map[atX][atZ][closestY] = g_blockType;
@@ -144,10 +144,12 @@ function addBlock(atX, closestY, atZ) {
     // } else {
     //     console.log(`Failed to add block at (${atX}, ${closestY}, ${atZ})`);
     // }
-    let atX = toGridCoordinates(g_camera.at.elements[0]);
-    let atY = toGridCoordinates(g_camera.at.elements[1]); // so we can get to the center of Y
-    let atZ = toGridCoordinates(g_camera.at.elements[2] - 2);
-    
+
+    let atX = toGridCoordinates(g_camera.eye.elements[0] + 15);
+    let atY = toGridCoordinates(g_camera.eye.elements[1]); // so we can get to the center of Y
+    let atZ = toGridCoordinates(g_camera.eye.elements[2] + 15);
+    console.log(`attempting to add block at (${atZ}, ${atX}, ${atY})`);
+
     g_map[atZ][atX][atY] = g_blockType;
 
     bunnyHappiness++;
@@ -158,14 +160,25 @@ function addBlock(atX, closestY, atZ) {
 
 
 // Function to remove a block
-function removeBlock(atX, closestY, atZ) {
-    if (closestY >= 0) {
-        g_map[atX][atZ][closestY] = 0;
-        bunnyHappiness++;
-        console.log(`Removed block at (${atX}, ${closestY}, ${atZ})`);
-    } else {
-        console.log(`Failed to remove block at (${atX}, ${closestY}, ${atZ})`);
+function removeBlock() {
+    // if (closestY >= 0) {
+    //     g_map[atX][atZ][closestY] = 0;
+    //     bunnyHappiness++;
+    //     console.log(`Removed block at (${atX}, ${closestY}, ${atZ})`);
+    // } else {
+    //     console.log(`Failed to remove block at (${atX}, ${closestY}, ${atZ})`);
+    // }
+    let atX = toGridCoordinates(g_camera.eye.elements[0] + 15);
+    let atY = toGridCoordinates(g_camera.eye.elements[1]); // so we can get to the center of Y
+    let atZ = toGridCoordinates(g_camera.eye.elements[2] + 15);
+    console.log(`attempting to remove block at (${atZ}, ${atX}, ${atY})`);
+    g_map[atZ][atX][atY] = 0;
+    if (g_map[atZ][atX][atY] !== undefined) {
+        delete g_map[atZ][atX][atY];
     }
+
+    bunnyHappiness--;
+    console.log(`removed block at (${atZ}, ${atX}, ${atY})`);
 }
 
 // Function to find the closest block Y-coordinate
@@ -211,17 +224,17 @@ function pickBlock() {
         // if (atX < 32 && atZ < 32) {
         //     g_selectedBlock = [atZ, atX, closestBlockY];
         // }
-        let atX = toGridCoordinates(g_camera.at.elements[0]); // cast to int
-        let atY = toGridCoordinates(g_camera.at.elements[1]); // so we can get to the center of Y
-        let atZ = toGridCoordinates(g_camera.at.elements[2] - 2 );
-        let xz_plane = g_map[atZ][atX];
-        //let closestBlockY = findClosestY(xz_plane, atY); // helps find the closest block which we use by finding the closest y
-        // if (atX < 32 && atZ < 32) {
-            //g_selectedBlock = [atZ, atX, closestBlockY];
-            g_selectedBlock = [atZ, atX, atY];
-        // }
+        // let atX = toGridCoordinates(g_camera.at.elements[0]); // cast to int
+        // let atY = toGridCoordinates(g_camera.at.elements[1]); // so we can get to the center of Y
+        // let atZ = toGridCoordinates(g_camera.at.elements[2] - 2 );
+        // let xz_plane = g_map[atZ][atX];
+        // //let closestBlockY = findClosestY(xz_plane, atY); // helps find the closest block which we use by finding the closest y
+        // // if (atX < 32 && atZ < 32) {
+        //     //g_selectedBlock = [atZ, atX, closestBlockY];
+        //     g_selectedBlock = [atZ, atX, atY];
+        // // }
     }
-    else {
-        g_selectedBlock = null; // don't do anything
-    }
+    // else {
+    //     g_selectedBlock = null; // don't do anything
+    // }
 }
