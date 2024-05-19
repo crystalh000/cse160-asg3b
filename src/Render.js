@@ -56,7 +56,7 @@ function drawMap() {
             block.matrix.translate(0, -0.75, 0);
             block.matrix.scale(0.5, 0.5, 0.5);
             block.matrix.translate(x - 16, y, z - 16);
-            block.render();
+            block.renderfast();
           }
         }
       }
@@ -112,7 +112,7 @@ function renderAllShapes() {
     body.matrix.rotate(g_bodyAngle, 0, 0, 1);
     var bodyCoordinatesMat=new Matrix4(body.matrix);
     body.matrix.scale(0.5, 0.5, 0.5); // Adjusted scale to be the same in all dimensions
-    body.render();
+    body.renderfast();
   
     // right foot
     var footR = new Cube();
@@ -129,7 +129,7 @@ function renderAllShapes() {
     footR.matrix.scale(0.08,0.17,0.1);
   
     // Render the foot
-    footR.render();
+    footR.renderfast();
   
     // Left foot
     var footL = new Cube();
@@ -146,7 +146,7 @@ function renderAllShapes() {
     footL.matrix.scale(0.08,0.17,0.1);
   
     // Render the foot
-    footL.render();
+    footL.renderfast();
   
   
   
@@ -160,7 +160,7 @@ function renderAllShapes() {
     // armL.matrix.translate(-0.35,-0.45,-0.1); // for the pivot
     armL.matrix.translate(0, -0.55, 0);
     armL.matrix.scale(0.1,0.4,0.15);
-    armL.render();
+    armL.renderfast();
   
   
     // armR.render();
@@ -173,7 +173,7 @@ function renderAllShapes() {
     // armL.matrix.translate(-0.35,-0.45,-0.1); // for the pivot
     armR.matrix.translate(0, -0.55, 0);
     armR.matrix.scale(0.1,0.4,0.15);
-    armR.render();
+    armR.renderfast();
     
   
     // draw the rabbit head
@@ -189,7 +189,7 @@ function renderAllShapes() {
     var yellowCoordinatesMat=new Matrix4(yellow.matrix);
     yellow.matrix.scale(0.45,0.45,0.45);
     yellow.matrix.translate(-0.5, 0 + 0.1,0);
-    yellow.render();
+    yellow.renderfast();
   
     // draw tail 
     var tail = new Cube();
@@ -199,7 +199,7 @@ function renderAllShapes() {
     tail.matrix.translate(0.195,0.1,0.5);
     // yellow.matrix.rotate(-5,1,0,0); // rotate the arm
     tail.matrix.scale(0.1,0.1,0.1);
-    tail.render();
+    tail.renderfast();
   
   
     // draw cone hat on top
@@ -224,7 +224,7 @@ function renderAllShapes() {
     earR.matrix.translate(0.10,0.45,0.01);
     earR.matrix.rotate(-g_magentaAngleR,1,0,0);
     earR.matrix.scale(0.1,0.41,0.1);
-    earR.render();
+    earR.renderfast();
   
     // Left ear
     var earL = new Cube();
@@ -235,7 +235,7 @@ function renderAllShapes() {
     earL.matrix.translate(-0.2,0.45,0.01); 
     earL.matrix.rotate(-g_magentaAngleL,1,0,0);
     earL.matrix.scale(0.1,0.41,0.1);
-    earL.render();
+    earL.renderfast();
   
     // check the time at the end of the function and show on web page
     var duration = performance.now() - startTime;

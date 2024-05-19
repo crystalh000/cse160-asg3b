@@ -1,151 +1,32 @@
-// function handleMouseClick(event) {
-//     const rect = canvas.getBoundingClientRect();
-//     const x = event.clientX - rect.left;
-//     const y = event.clientY - rect.top;
-  
-//     // Convert click coordinates to world coordinates
-//     const worldX = Math.floor((x / canvas.width) * worldSize);
-//     const worldY = Math.floor((y / canvas.height) * worldSize);
-  
-//     // Check if a cube exists at the clicked position
-//     const cubeIndex = cubesData.findIndex(cube => cube.x === worldX && cube.y === worldY);
-  
-//     if (cubeIndex !== -1) {
-//       // Remove cube and update Bunnie's Happiness
-//       cubesData.splice(cubeIndex, 1);
-//       bunnyHappiness++;
-//     }
-//     document.getElementById('happinessCounter').innerText = bunnyHappiness;
-//   }
 
-// function handleMouseClick(event) {
-//     const rect = canvas.getBoundingClientRect();
-//     const x = event.clientX - rect.left;
-//     const y = event.clientY - rect.top;
-  
-//     // Convert click coordinates to world coordinates
-//     const worldX = Math.floor((x / canvas.width) * worldSize);
-//     const worldY = Math.floor((y / canvas.height) * worldSize);
-  
-//     // Check if a cube exists at the clicked position
-//     const cubeIndex = cubesData.findIndex(cube => cube.x === worldX && cube.y === worldY);
-  
-//     if (cubeIndex !== -1) {
-//       // Remove cube and update Bunnie's Happiness
-//       cubesData.splice(cubeIndex, 1);
-//       bunnyHappiness++;
-//     } else {
-//       // Add a new cube at the clicked position
-//       cubesData.push({ x: worldX, y: worldY, color: g_blockType });
-//       bunnyHappiness++;
-//     }
-//     document.getElementById('happinessCounter').innerText = bunnyHappiness;
-// }
-
-// code gotten from Gemini
-// function handleMouseClick(event) {
-//     const rect = canvas.getBoundingClientRect();
-//     const x = event.clientX - rect.left;
-//     const y = event.clientY - rect.top;
-  
-//     // Convert click coordinates to world coordinates
-//     const worldX = toGridCoordinates((x / canvas.width) * worldSize);
-//     const worldY = toGridCoordinates((y / canvas.height) * worldSize);
-  
-//     // Find the closest block Y-coordinate
-//     const closestY = findClosestBlockY(g_map[worldX], worldY);
-  
-//     if (g_buildMode === "build") {
-//       addBlock(worldX, closestY, 0); // Assuming z-axis is 0 for the ground
-//     } else if (g_buildMode === "destroy") {
-//       removeBlock(worldX, closestY, 0);
-//     }
-  
-//     document.getElementById('happinessCounter').innerText = bunnyHappiness;
-//   }
-// function handleMouseClick(event) {
-//     console.log("mouse click");
-//     const rect = canvas.getBoundingClientRect();
-//     const x = event.clientX - rect.left;
-//     const y = event.clientY - rect.top;
-  
-//     // Convert click coordinates to world coordinates
-//     const worldX = toGridCoordinates((x / canvas.width) * worldSize);
-//     const worldY = toGridCoordinates((y / canvas.height) * worldSize);
-  
-//     // Check if worldX and worldY are within the bounds of the g_map array
-//     if (worldX >= 0 && worldX < g_map.length && worldY >= 0 && worldY < g_map[worldX].length) {
-//         // Find the closest block Y-coordinate
-//         const closestY = findClosestBlockY(g_map[worldX][worldY], worldY);
-  
-//         if (g_buildMode === build) {
-//             console.log("attempting to build block");
-//           addBlock(worldX, closestY, 0); // Assuming z-axis is 0 for the ground
-//         } else if (g_buildMode === destroy) {
-//           removeBlock(worldX, closestY, 0);
-//           console.log("attempting to destroy block");
-//         }
-//     }
-  
-//     document.getElementById('happinessCounter').innerText = bunnyHappiness;
-//     renderAllShapes(); 
-// }
-
-// function handleMouseClick(event) {
-//     console.log("mouse click");
-//     const rect = canvas.getBoundingClientRect();
-//     const x = event.clientX - rect.left;
-//     const y = event.clientY - rect.top;
-  
-//     // Convert click coordinates to world coordinates
-//     const worldX = toGridCoordinates((x / canvas.width) * worldSize);
-//     const worldY = toGridCoordinates((y / canvas.height) * worldSize);
-//     console.log(`World coordinates: (${worldX}, ${worldY})`);
-  
-//     // Check if worldX and worldY are within the bounds of the g_map array
-//     if (worldX >= 0 && worldX < g_map.length && worldY >= 0 && worldY < g_map[worldX].length) {
-//         // Find the closest block Y-coordinate
-//         const closestY = findClosestBlockY(g_map[worldX][worldY], worldY);
-//         console.log(`Closest block Y-coordinate: ${closestY}`);
-  
-//         if (g_buildMode === build) {
-//             console.log("attempting to build block");
-//             addBlock(worldX, closestY + 1, 0); // Assuming z-axis is 0 for the ground
-//         } else if (g_buildMode === destroy) {
-//             console.log("attempting to destroy block");
-//             removeBlock(worldX, closestY, 0);
-//         }
-//     }
-  
-//     document.getElementById('happinessCounter').innerText = bunnyHappiness;
-//     renderAllShapes(); // Re-render the scene after adding or removing a block
-// }
 
 function handleMouseClick(event) {
-    console.log("mouse click");
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    console.log(`Screen coordinates: (${x}, ${y})`);
-    // Convert click coordinates to world coordinates
-    const worldX = toGridCoordinates((x / canvas.width) * worldSize);
-    const worldY = toGridCoordinates((y / canvas.height) * worldSize);
-    console.log(`World coordinates: (${worldX}, ${worldY})`);
+    // console.log("mouse click");
+    // const rect = canvas.getBoundingClientRect();
+    // const x = event.clientX - rect.left;
+    // const y = event.clientY - rect.top;
+    // console.log(`Screen coordinates: (${x}, ${y})`);
+    // // Convert click coordinates to world coordinates
+    // const worldX = toGridCoordinates((x / canvas.width) * worldSize);
+    // const worldY = toGridCoordinates((y / canvas.height) * worldSize);
+    // console.log(`World coordinates: (${worldX}, ${worldY})`);
 
-    // Check if worldX and worldY are within the bounds of the g_map array
-    if (worldX >= 0 && worldX < g_map.length && worldY >= 0 && worldY < g_map[worldX].length) {
-        // Find the closest block Y-coordinate
-        const closestY = findClosestBlockY(g_map[worldX][worldY], 0); // Assuming 0 for the ground level
-        console.log(`Closest block Y-coordinate: ${closestY}`);
+    // // Check if worldX and worldY are within the bounds of the g_map array
+    // if (worldX >= 0 && worldX < g_map.length && worldY >= 0 && worldY < g_map[worldX].length) {
+    //     // Find the closest block Y-coordinate
+    //     const closestY = findClosestY(g_map[worldX][worldY], 0); // Assuming 0 for the ground level
+    //     console.log(`Closest block Y-coordinate: ${closestY}`);
 
-        if (g_buildMode === BUILD_MODE) {
-            console.log("attempting to build block");
-            addBlock(worldX, closestY + 1, worldY); // Assuming z-axis is worldY
-        } else if (g_buildMode === DESTROY_MODE) {
-            console.log("attempting to destroy block");
-            removeBlock(worldX, closestY, worldY);
-        }
-    }
+    //     if (g_buildMode === BUILD_MODE) {
+    //         console.log("attempting to build block");
+    //         addBlock(worldX, closestY + 1, worldY); // Assuming z-axis is worldY
+    //     } else if (g_buildMode === DESTROY_MODE) {
+    //         console.log("attempting to destroy block");
+    //         removeBlock(worldX, closestY, worldY);
+    //     }
+    // }
+
+    
 
     document.getElementById('happinessCounter').innerText = bunnyHappiness;
     renderAllShapes(); // Re-render the scene after adding or removing a block
@@ -176,19 +57,24 @@ function handleMouseClick(event) {
             break;
         case 't':
             g_buildMode = none;
+            pickBlock();
             break;
-        case 'f':
+        case 'b':
             g_buildMode = BUILD_MODE;
             g_blockType = carrotBlock;
-            console.log("build mode activated through f");
+            console.log("build mode activated through b");
+            pickBlock(); 
+            console.log("attempting to select blocks");
             break;
         case 'v':
             g_buildMode = DESTROY_MODE;
-            console.log("build mode activated through v");
+            console.log("destroy mode activated through v");
+            pickBlock(); 
             break;
-        case '5':
-            g_blockType = carrotBlock; // texture of carrotBlock which is 4
-            break;
+        // case '5':
+        //     g_blockType = carrotBlock; // texture of carrotBlock which is 4
+        //     pickBlock(); 
+        //     break;
     }
   }
 
@@ -209,7 +95,7 @@ function addActionsForHTMLUI() {
     document.getElementById('yellowSlide').addEventListener('mousemove', function() { g_yellowAngle = this.value; renderAllShapes(); });
     document.getElementById('magentaSlide').addEventListener('mousemove', function() { g_magentaAngleR = this.value; g_magentaAngleL = this.value; renderAllShapes(); });
   
-    document.getElementById('angleSlide').addEventListener('mousemove',  function() { g_globalAngle = this.value; renderAllShapes();  });
+    document.getElementById('angleSlide').addEventListener('mousemove',  function() { g_globalAngle = this.value; renderAllShapes(); pickBlock(); });
     
   }
   
@@ -235,61 +121,41 @@ function sendTextToHTML(text, htmlID) {
     return([x,y]);
   }
 
-// the following is taken from referencing Bees in Hall of Fame and ChatGPT
-function toGridCoordinates(value) {
+// the following is heavily inspired from a friend's which I took to understand carefully before implementing something similar
+// just so i can add and delete blocks within a 2D --> 3D world
+
+function toGridCoordinates(value) { // add depth and exponential scaling
     return Math.floor(value);
+    // if (value < -8) {
+    //     return 0;
+    //   }
+    //   else {
+    //     return Math.round((value + 8) * 2);
+    //   }
 }
-
-// Function to add a block
-// function addBlock(atX, closestY, atZ) {
-//     if (closestY < g_buildHeight - 1) {
-//         g_map[atZ][atX][closestY + 1] = g_blockType;
-//         bunnyHappiness++;
-//     }
-//     console.log("adding block");
-// }
-
-// // Function to remove a block
-// function removeBlock(atX, closestY, atZ) {
-//     if (closestY >= 0) {
-//         delete g_map[atZ][atX][closestY];
-//         bunnyHappiness++;
-//     }
-// }
-
-
-// Function to add a block
-// function addBlock(atX, closestY, atZ) {
-//     if (closestY < g_buildHeight - 1) {
-//         g_map[atZ][atX][closestY + 1] = g_blockType;
-//         bunnyHappiness++;
-//         console.log(`Added block at (${atX}, ${closestY + 1}, ${atZ})`);
-//     } else {
-//         console.log(`Failed to add block at (${atX}, ${closestY + 1}, ${atZ})`);
-//     }
-// }
-
-// // Function to remove a block
-// function removeBlock(atX, closestY, atZ) {
-//     if (closestY >= 0) {
-//         delete g_map[atZ][atX][closestY];
-//         bunnyHappiness++;
-//         console.log(`Removed block at (${atX}, ${closestY}, ${atZ})`);
-//     } else {
-//         console.log(`Failed to remove block at (${atX}, ${closestY}, ${atZ})`);
-//     }
-// }
 
 function addBlock(atX, closestY, atZ) {
-    if (closestY < g_buildHeight - 1) {
-        g_map[atX][atZ][closestY] = g_blockType;
-        //g_map[z][x][0] = darkRock;
-        bunnyHappiness++;
-        console.log(`Added block at (${atX}, ${closestY}, ${atZ})`);
-    } else {
-        console.log(`Failed to add block at (${atX}, ${closestY}, ${atZ})`);
-    }
+    
+    // if (closestY < g_buildHeight - 1) {
+    //     g_map[atX][atZ][closestY] = g_blockType;
+    //     //g_map[z][x][0] = darkRock;
+    //     bunnyHappiness++;
+    //     console.log(`Added block at (${atX}, ${closestY}, ${atZ})`);
+    // } else {
+    //     console.log(`Failed to add block at (${atX}, ${closestY}, ${atZ})`);
+    // }
+    let atX = toGridCoordinates(g_camera.at.elements[0]);
+    let atY = toGridCoordinates(g_camera.at.elements[1]); // so we can get to the center of Y
+    let atZ = toGridCoordinates(g_camera.at.elements[2] - 2);
+    
+    g_map[atZ][atX][atY] = g_blockType;
+
+    bunnyHappiness++;
+    console.log(`Added block at (${atZ}, ${atX}, ${atY})`);
 }
+
+
+
 
 // Function to remove a block
 function removeBlock(atX, closestY, atZ) {
@@ -303,8 +169,59 @@ function removeBlock(atX, closestY, atZ) {
 }
 
 // Function to find the closest block Y-coordinate
-function findClosestBlockY(column, y) {
-    var keys = Object.keys(column).map(key => parseInt(key)).sort((a, b) => a - b);
-    var closestY = keys.find(key => key <= y);
-    return closestY !== undefined ? closestY : -1;
+// function findClosestBlockY(column, y) {
+//     var keys = Object.keys(column).map(key => parseInt(key)).sort((a, b) => a - b);
+//     var closestY = keys.find(key => key <= y);
+//     return closestY !== undefined ? closestY : -1;
+// }
+
+// finds the closest block based on the camera view (so we can delete and add blocks that are clsest to us)
+
+// takes in a map and the targetY value and returns the 
+function findClosestY(mapPlane, targetY) {
+    const mapVals = Object.keys(mapPlane);
+    // if there are no keys return -1
+    if (mapVals.length === 0) {
+        return -1;
+    }
+    // convert the vals to numbers
+    const numericKeys = mapVals.map(key => parseInt(key));
+    let closestBlock = -1;
+
+    // Iterate over the keys to find the nearest one
+    numericKeys.forEach(key => {
+        if (key <= targetY && key > closestBlock) {
+            closestBlock = key;
+        }
+    });
+
+  // If no nearest key is found, return -1
+    return closestBlock === undefined ? -1 : closestBlock;
+
+}
+
+// helps us decide and pinpoint the area in which we want to add or remove a block
+function pickBlock() {
+    if (g_buildMode == BUILD_MODE || g_buildMode == DESTROY_MODE) {
+        // let atX = toGridCoordinates(g_camera.at.elements[0]);
+        // let atY = toGridCoordinates(g_camera.at.elements[1] - 16); // so we can get to the center of Y
+        // let atZ = toGridCoordinates(g_camera.at.elements[2]);
+        // let xz_plane = g_map[atZ][atX];
+        // let closestBlockY = findClosestY(xz_plane, atY); // helps find the closest block which we use by finding the closest y
+        // if (atX < 32 && atZ < 32) {
+        //     g_selectedBlock = [atZ, atX, closestBlockY];
+        // }
+        let atX = toGridCoordinates(g_camera.at.elements[0]); // cast to int
+        let atY = toGridCoordinates(g_camera.at.elements[1]); // so we can get to the center of Y
+        let atZ = toGridCoordinates(g_camera.at.elements[2] - 2 );
+        let xz_plane = g_map[atZ][atX];
+        //let closestBlockY = findClosestY(xz_plane, atY); // helps find the closest block which we use by finding the closest y
+        // if (atX < 32 && atZ < 32) {
+            //g_selectedBlock = [atZ, atX, closestBlockY];
+            g_selectedBlock = [atZ, atX, atY];
+        // }
+    }
+    else {
+        g_selectedBlock = null; // don't do anything
+    }
 }
