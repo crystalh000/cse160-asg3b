@@ -51,6 +51,7 @@ function drawMap() {
         for (var y in g_map[z][x]) {
           if (g_map[z][x].hasOwnProperty(y)){
             block.textureNum = g_map[z][x][y];
+            //console.log("block texture number: ", block.textureNum);
   
             block.matrix.setIdentity();
             block.matrix.translate(0, -0.75, 0);

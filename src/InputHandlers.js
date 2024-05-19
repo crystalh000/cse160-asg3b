@@ -19,6 +19,7 @@ function handleMouseClick(event) {
 
         if (g_buildMode === BUILD_MODE) {
             console.log("attempting to build block");
+            g_blockType = carrotBlock;
             addBlock(); // Assuming z-axis is worldY
         } else if (g_buildMode === DESTROY_MODE) {
             console.log("attempting to destroy block");
@@ -29,7 +30,7 @@ function handleMouseClick(event) {
     
 
     document.getElementById('happinessCounter').innerText = bunnyHappiness;
-    renderAllShapes(); // Re-render the scene after adding or removing a block
+    //renderAllShapes(); // Re-render the scene after adding or removing a block
 }
   
   // code given from ChatGPT
@@ -149,7 +150,8 @@ function addBlock() {
     let atY = toGridCoordinates(g_camera.eye.elements[1]); // so we can get to the center of Y
     let atZ = toGridCoordinates(g_camera.eye.elements[2] + 15);
     console.log(`attempting to add block at (${atZ}, ${atX}, ${atY})`);
-
+    g_blockType = carrotBlock;
+    console.log("carrotblock:", carrotBlock);
     g_map[atZ][atX][atY] = g_blockType;
 
     bunnyHappiness++;
@@ -176,7 +178,6 @@ function removeBlock() {
     if (g_map[atZ][atX][atY] !== undefined) {
         delete g_map[atZ][atX][atY];
     }
-
     bunnyHappiness--;
     console.log(`removed block at (${atZ}, ${atX}, ${atY})`);
 }
